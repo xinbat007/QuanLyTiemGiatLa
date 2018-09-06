@@ -17,10 +17,15 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             try
             {
-                Xuly.ThaoTacIniServer.Write(txtServerName.Text, chkIsWindow.Checked, txtSA.Text, txt123456.Text,
-                                                chkRemember.Checked,
-                                                chkRemember.Checked ? txtUsername.Text : "",
-                                                chkRemember.Checked ? txtPassword.Text : "");
+                Properties.Settings.Default.ServerName = txtServerName.Text;
+                Properties.Settings.Default.IsWindow = chkIsWindow.Checked;
+                Properties.Settings.Default.UserNameServer = txtSA.Text;
+                Properties.Settings.Default.PasswordServer = txt123456.Text;
+                //==========================
+                Properties.Settings.Default.RememberMe = chkRemember.Checked;
+                Properties.Settings.Default.TenLoginHT = chkRemember.Checked ? txtUsername.Text : "";
+                Properties.Settings.Default.PassLoginHT = chkRemember.Checked ? txtPassword.Text : "";
+                Properties.Settings.Default.Save();
             }
             catch (System.Exception ex)
             {
@@ -31,21 +36,18 @@ namespace QuanLyTiemGiatLa.HeThong
         private void frmLogin_Load(object sender, EventArgs e)
         {
             lblMessage.Text = String.Empty;
+            txtServerName.Text = Properties.Settings.Default.ServerName;
+            chkIsWindow.Checked = Properties.Settings.Default.IsWindow;
+            txtSA.Text = Properties.Settings.Default.UserNameServer;
+            txt123456.Text = Properties.Settings.Default.PasswordServer;
+            //------------------------------
             txtUsername.Text = Properties.Settings.Default.TenLoginHT;
             txtPassword.Text = Properties.Settings.Default.PassLoginHT;
-            //txtUsername.Text = Xuly.ThaoTacIniServer.ReadTenLogin();
-            //txtPassword.Text = Xuly.ThaoTacIniServer.ReadPassLogin();
-            chkRemember.Checked = Xuly.ThaoTacIniServer.ReadRememberMe();
+            chkRemember.Checked = Properties.Settings.Default.RememberMe;
             //------------------------------
-            txtServerName.Text = Xuly.ThaoTacIniServer.ReadServer();
-            chkIsWindow.Checked = Xuly.ThaoTacIniServer.ReadIsWindow();
-            txtSA.Text = Xuly.ThaoTacIniServer.ReadUserName();
-            txt123456.Text = Xuly.ThaoTacIniServer.ReadPassword();
-            //------------------------------
-            if (String.IsNullOrEmpty(txtServerName.Text)) txtServerName.Text = ".\\SQLEXPRESS"; // TEL-6D64FC3A93F
+            if (String.IsNullOrEmpty(txtServerName.Text)) txtServerName.Text = "TEL-6D64FC3A93F\\SQLEXPRESS";
             if (String.IsNullOrEmpty(txtSA.Text)) txtSA.Text = "sa";
-            if (String.IsNullOrEmpty(txt123456.Text)) txt123456.Text = "sa";
-
+            if (String.IsNullOrEmpty(txt123456.Text)) txt123456.Text = "123456";
         }
 
         private Boolean CheckForm()
@@ -69,10 +71,6 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             try
             {
-                Properties.Settings.Default.UserName = txtUsername.Text;
-                Properties.Settings.Default.Password = txtPassword.Text;
-                Properties.Settings.Default.Save();
-                return;
                 /** Chú ý: phải có ít nhất 1 account trong database thì mới đăng nhập đc, cụ thể account admin */
                 if (!this.CheckForm()) return;
                 if (!this.TestConnect()) return;
