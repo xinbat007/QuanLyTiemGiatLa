@@ -1,0 +1,332 @@
+﻿using System;
+using Entity;
+using System.Data.SqlClient;
+using System.Data;
+using System.Collections.Generic;
+
+namespace DataAccess
+{
+	public class KhachHangDA
+	{
+		public static ListKhachHangEntity SelectAll(DateTime tungay, DateTime denngay, Boolean tatca)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "sp_KhachHang_SelectAll";
+
+			ListKhachHangEntity kq = new ListKhachHangEntity();
+			Dictionary<long, KhachHangEntity> dic = new Dictionary<long, KhachHangEntity>();
+			using (SqlDataReader reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					KhachHangEntity khachhang = new KhachHangEntity()
+					{
+						MaKhachHang = (Int64)reader["MaKhachHang"],
+						TenKhachHang = reader["TenKhachHang"].ToString(),
+						DiaChi = reader["DiaChi"] == DBNull.Value ? String.Empty : reader["DiaChi"].ToString(),
+						DienThoai = reader["DienThoai"] == DBNull.Value ? String.Empty : reader["DienThoai"].ToString(),
+						MaVip = reader["MaVip"] == DBNull.Value ? 0 : (Int32)reader["MaVip"],
+						TenVip = reader["TenVip"] == DBNull.Value ? String.Empty : reader["TenVip"].ToString()
+					};
+					kq.Add(khachhang);
+					dic.Add(khachhang.MaKhachHang, khachhang);
+				}
+				reader.Close();
+			}
+			command.Connection.Close();
+			//---------------------------
+			ListPhieuEntity listPhieu = SelectPhieuByNgayLap(tungay, denngay, tatca);
+			foreach (PhieuEntity phieu in listPhieu)
+			{
+				if (phieu.DaThanhToan)
+				{
+					Int64 tongtientruocgiam = phieu.TongTien;
+					Int64 tongtiensaugiam = tongtientruocgiam - TinhTienGiamGia(tongtientruocgiam, phieu.GiamGia);
+					dic[phieu.MaKhachHang].DaTungThanhToan += tongtiensaugiam;
+				}
+			}
+			return kq;
+		}
+
+		private static ListPhieuEntity SelectPhieuByNgayLap(DateTime tungay, DateTime denngay, Boolean tatca)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "[dbo].[sp_KhachHang_Phieu_SelectByNgayLap]";
+
+			if (!tatca)
+			{
+				SqlParameter param = new SqlParameter("@TuNgay", SqlDbType.DateTime);
+				param.Value = tungay;
+				command.Parameters.Add(param);
+
+				param = new SqlParameter("@DenNgay", SqlDbType.DateTime);
+				param.Value = denngay;
+				command.Parameters.Add(param);
+			}
+
+			ListPhieuEntity kq = new ListPhieuEntity();
+			using (SqlDataReader reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					kq.Add(new PhieuEntity()
+					{
+						MaKhachHang = Convert.ToInt64( reader["MaKhachHang"]),
+						GiamGia = reader["GiamGia"] == DBNull.Value ? 0 : Convert.ToInt32(reader["GiamGia"]),
+						TongTien = reader["TongTien"] == DBNull.Value ? 0 : Convert.ToInt64(reader["TongTien"]),
+						DaThanhToan = true	// trong câu select đã select những phiếu đã thanh toán rồi
+					});
+				}
+				reader.Close();
+			}
+			command.Connection.Close();
+			return kq;
+		}
+
+		public static KhachHangEntity SelectByMaKhachHang(Int64 makh)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "sp_KhachHang_SelectByMaKhachHang";
+
+			SqlParameter param = new SqlParameter("@MaKhachHang", SqlDbType.BigInt, 8);
+			param.Value = makh;
+			command.Parameters.Add(param);
+
+			KhachHangEntity kq = null;
+			using (SqlDataReader reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					kq = new KhachHangEntity()
+					{
+						MaKhachHang = makh,
+						TenKhachHang = reader["TenKhachHang"].ToString(),
+						DiaChi = reader["DiaChi"] == null ? String.Empty : reader["DiaChi"].ToString(),
+						DienThoai = reader["DienThoai"] == null ? String.Empty : reader["DienThoai"].ToString(),
+						MaVip = reader["MaVip"] == DBNull.Value ? 0 : (Int32)reader["MaVip"],
+						TenVip = reader["TenVip"] == DBNull.Value ? String.Empty : reader["TenVip"].ToString(),
+						GiamGia = reader["GiamGia"] == DBNull.Value ? 0 : (Int32)reader["GiamGia"]
+					};
+				}
+				reader.Close();
+			}
+			command.Connection.Close();
+			return kq;
+		}
+
+		public static ListKhachHangEntity SearchByWhere(String where, DateTime tungay, DateTime denngay, Boolean tatca)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "[dbo].[sp_KhachHang_SearchByWhere]";
+			SqlParameter param = new SqlParameter("@where", SqlDbType.NVarChar, 400);
+			param.Value = where;
+			command.Parameters.Add(param);
+			ListKhachHangEntity kq = new ListKhachHangEntity();
+			Dictionary<long, KhachHangEntity> dic = new Dictionary<long, KhachHangEntity>();
+			using (SqlDataReader reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					KhachHangEntity khachhang =new KhachHangEntity()
+					{
+						MaKhachHang = (Int64)reader["MaKhachHang"],
+						TenKhachHang = reader["TenKhachHang"].ToString(),
+						DiaChi = reader["DiaChi"] == DBNull.Value ? String.Empty : reader["DiaChi"].ToString(),
+						DienThoai = reader["DienThoai"] == DBNull.Value ? String.Empty : reader["DienThoai"].ToString(),
+						MaVip = reader["MaVip"] == DBNull.Value ? 0 : (Int32)reader["MaVip"],
+						TenVip = reader["TenVip"] == DBNull.Value ? String.Empty : reader["TenVip"].ToString()
+					};
+					kq.Add(khachhang);
+					dic.Add(khachhang.MaKhachHang, khachhang);
+				}
+				reader.Close();
+			}
+			command.Connection.Close();
+			//---------------------------
+			ListPhieuEntity listPhieu = SelectPhieuByNgayLap(tungay, denngay, tatca);
+			foreach (PhieuEntity phieu in listPhieu)
+			{
+				if (phieu.DaThanhToan)
+				{
+					Int64 tongtientruocgiam = phieu.TongTien;
+					Int64 tongtiensaugiam = tongtientruocgiam - TinhTienGiamGia(tongtientruocgiam, phieu.GiamGia);
+					
+					dic[phieu.MaKhachHang].DaTungThanhToan += tongtiensaugiam;
+				}
+			}
+			return kq;
+		}
+
+		public static ListKhachHangEntity Search(KhachHangEntity khachhang)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "[dbo].[sp_KhachHang_Search]";
+
+			SqlParameter param = null;
+			if (!String.IsNullOrEmpty(khachhang.TenKhachHang))
+			{
+				param = new SqlParameter("@TenKhachHang", SqlDbType.NVarChar, 100);
+				param.Value = khachhang.TenKhachHang;
+				command.Parameters.Add(param);
+			}
+
+			if (!String.IsNullOrEmpty(khachhang.DiaChi))
+			{
+				param = new SqlParameter("@DiaChi", SqlDbType.NVarChar, 200);
+				param.Value = khachhang.DiaChi;
+				command.Parameters.Add(param);
+			}
+
+			if (!String.IsNullOrEmpty(khachhang.DienThoai))
+			{
+				param = new SqlParameter("@DienThoai", SqlDbType.VarChar, 20);
+				param.Value = khachhang.DienThoai;
+				command.Parameters.Add(param);
+			}
+
+			ListKhachHangEntity kq = new ListKhachHangEntity();
+			using (SqlDataReader reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					kq.Add(new KhachHangEntity()
+					{
+						MaKhachHang = (Int64)reader["MaKhachHang"],
+						TenKhachHang = reader["TenKhachHang"].ToString(),
+						DiaChi = reader["DiaChi"] == DBNull.Value ? String.Empty : reader["DiaChi"].ToString(),
+						DienThoai = reader["DienThoai"] == DBNull.Value ? String.Empty : reader["DienThoai"].ToString(),
+						MaVip = reader["MaVip"] == DBNull.Value ? 0 : (Int32)reader["MaVip"],
+						TenVip = reader["TenVip"] == DBNull.Value ? String.Empty : reader["TenVip"].ToString(),
+						GiamGia = reader["GiamGia"] == DBNull.Value ? 0 : (Int32)reader["GiamGia"]
+					});
+				}
+				reader.Close();
+			}
+			command.Connection.Close();
+			return kq;
+		}
+
+		public static Double CountSoTienDaTungThanhToan(Int64 makh)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "[dbo].[sp_KhachHang_CountTienDaThanhToan]";
+
+			SqlParameter param = new SqlParameter("@MaKhachHang", SqlDbType.BigInt, 8);
+			param.Value = makh;
+			command.Parameters.Add(param);
+
+			Double kq = 0;
+			using (SqlDataReader reader = command.ExecuteReader())
+			{
+				while (reader.Read())
+				{
+					if (reader["truockhigiamgia"] == DBNull.Value) continue;
+					Int64 tientrckhigiamgia = Convert.ToInt64(reader["truockhigiamgia"]);
+					kq += tientrckhigiamgia;
+					if (reader["GiamGia"] != DBNull.Value)
+					{
+						Int32 giamgia = (Int32)reader["GiamGia"];
+						Int64 tiengiam = TinhTienGiamGia(tientrckhigiamgia, giamgia);
+						kq -= tiengiam;
+					}
+				}
+				reader.Close();
+			}
+			command.Connection.Close();
+			return kq;
+		}
+
+		private static Int64 TinhTienGiamGia(Int64 tongtientruocgiamgia, Int32 giamgia)
+		{
+			Int64 sotiengiam = tongtientruocgiamgia * giamgia / 100;//chỗ này ra 4500
+			Int64 phandu = sotiengiam % 1000;// chỗ này ra 500
+			sotiengiam = sotiengiam - phandu;// chỗ này ra 4000
+			return sotiengiam;// return 4000
+		}
+
+		public static Int64 Insert(KhachHangEntity khachhang)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "sp_KhachHang_Insert";
+			SqlParameter param = new SqlParameter("@TenKhachHang", SqlDbType.NVarChar, 100);
+			param.Value = khachhang.TenKhachHang;
+			command.Parameters.Add(param);
+			if (!String.IsNullOrEmpty(khachhang.DiaChi))
+			{
+				param = new SqlParameter("@DiaChi", SqlDbType.NVarChar, 200);
+				param.Value = khachhang.DiaChi;
+				command.Parameters.Add(param);
+			}
+			if (!String.IsNullOrEmpty(khachhang.DienThoai))
+			{
+				param = new SqlParameter("@DienThoai", SqlDbType.NVarChar, 20);
+				param.Value = khachhang.DienThoai;
+				command.Parameters.Add(param);
+			}
+			if (khachhang.MaVip > 0)
+			{
+				param = new SqlParameter("@MaVip", SqlDbType.Int, 4);
+				param.Value = khachhang.MaVip;
+				command.Parameters.Add(param);
+			}
+			return Int64.Parse(command.ExecuteScalar().ToString());
+		}
+
+		public static Int32 Update(KhachHangEntity khachhang)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "sp_KhachHang_Update";
+
+			SqlParameter param = new SqlParameter("@MaKhachHang", SqlDbType.BigInt);
+			param.Value = khachhang.MaKhachHang;
+			command.Parameters.Add(param);
+
+			if (!String.IsNullOrEmpty(khachhang.TenKhachHang))
+			{
+				param = new SqlParameter("@TenKhachHang", SqlDbType.NVarChar, 100);
+				param.Value = khachhang.TenKhachHang;
+				command.Parameters.Add(param);
+			}
+			if (!String.IsNullOrEmpty(khachhang.DiaChi))
+			{
+				param = new SqlParameter("@DiaChi", SqlDbType.NVarChar, 200);
+				param.Value = khachhang.DiaChi;
+				command.Parameters.Add(param);
+			}
+			if (!String.IsNullOrEmpty(khachhang.DienThoai))
+			{
+				param = new SqlParameter("@DienThoai", SqlDbType.NVarChar, 20);
+				param.Value = khachhang.DienThoai;
+				command.Parameters.Add(param);
+			}
+			if (khachhang.MaVip > 0)
+			{
+				param = new SqlParameter("@MaVip", SqlDbType.Int, 4);
+				param.Value = khachhang.MaVip;
+				command.Parameters.Add(param);
+			}
+			return command.ExecuteNonQuery();
+		}
+
+		public static Int32 Delete(Int64 MaKhachHang)
+		{
+			SqlCommand command = DUtils.GetCommand();
+			command.CommandType = System.Data.CommandType.StoredProcedure;
+			command.CommandText = "sp_KhachHang_Delete";
+			SqlParameter param = new SqlParameter("@MaKhachHang", SqlDbType.BigInt);
+			param.Value = MaKhachHang;
+			command.Parameters.Add(param);
+			return command.ExecuteNonQuery();
+		}
+
+
+	}
+}
