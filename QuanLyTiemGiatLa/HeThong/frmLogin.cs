@@ -71,6 +71,11 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             try
             {
+                if (!BienChung.isTrienKhai)
+                {
+                    this.DialogResult = DialogResult.OK;
+                    return;
+                }
                 /** Chú ý: phải có ít nhất 1 account trong database thì mới đăng nhập đc, cụ thể account admin */
                 if (!this.CheckForm()) return;
                 if (!this.TestConnect()) return;

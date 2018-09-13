@@ -113,17 +113,13 @@ namespace QuanLyTiemGiatLa.Xuly
         public static string getlogonUser()
         {
             string _user = string.Empty;
-
             ManagementObjectSearcher objMOS = new ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem");
             ManagementObjectCollection objMOC;
-
             objMOC = objMOS.Get();
-
             foreach (ManagementObject objMO in objMOC)
             {
                 _user = objMO["UserName"].ToString();
             }
-
             return _user;
         }
 
@@ -136,7 +132,6 @@ namespace QuanLyTiemGiatLa.Xuly
             String idtrongngay = id > 99 ? id.ToString() :
                 id > 9 ? "0" + id.ToString() : "00" + id.ToString();
             return sodautien + sothu2 + sothu3 + idtrongngay;
-
         }
 
         //public static String ThemVaoMacacPhieuDangSuDung(String chuoidauvao, Int64 maphieuthemvao)

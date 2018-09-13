@@ -25,8 +25,8 @@ namespace QuanLyTiemGiatLa.HeThong
             {
                 dgvGhiChu.Rows.Add(_dsGhiChu[i]);
             }
-			txtKCGhiChu.Text = ThaoTacIniCauHinhGhiChu.ReadKCGhiChu().ToString();
-			txtChieuNgangForm.Text = ThaoTacIniCauHinhGhiChu.ReadChieuNgangForm().ToString();
+            txtKCGhiChu.Text = ThaoTacIniCauHinhGhiChu.ReadKCGhiChu().ToString();
+            txtChieuNgangForm.Text = ThaoTacIniCauHinhGhiChu.ReadChieuNgangForm().ToString();
         }
 
         private void btnThoat_Click(object sender, System.EventArgs e)
@@ -46,10 +46,10 @@ namespace QuanLyTiemGiatLa.HeThong
                 }
                 outfile.Close();
             }
-			int kcghichu, chieungangform;
-			int.TryParse(txtKCGhiChu.Text, out kcghichu);
-			int.TryParse(txtChieuNgangForm.Text, out chieungangform);
-			ThaoTacIniCauHinhGhiChu.Write(kcghichu, chieungangform);
+            int kcghichu, chieungangform;
+            int.TryParse(txtKCGhiChu.Text, out kcghichu);
+            int.TryParse(txtChieuNgangForm.Text, out chieungangform);
+            ThaoTacIniCauHinhGhiChu.Write(kcghichu, chieungangform);
         }
     }
 }

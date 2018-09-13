@@ -368,13 +368,233 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 MessageBox.Show("Bạn chưa có chi tiết phiếu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            if (Xuly.ThaoTacIniCauHinhPhanMem.ReadKhoMayIn() == 0)
-            {   // In khổ nhỏ
-                InKhoNho(lstctphieu, e);
+            this.InTheoTemplate(lstctphieu, e);
+        }
+
+        private void InChiTietPhieuTemplate(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e)
+        {
+            string filePrintCTPhieuTemplate = @"template_In_ChiTietPhieu.txt";
+            String line = String.Empty;
+            if (System.IO.File.Exists(filePrintCTPhieuTemplate))
+            {
+                System.Drawing.Font fontCurrent = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
+                foreach (ChiTietPhieuEntity item in lstctphieu)
+                {
+                    var filestream = new System.IO.FileStream(filePrintCTPhieuTemplate, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                    var file = new System.IO.StreamReader(filestream);
+                    while ((line = file.ReadLine()) != null)
+                    {
+                        if (line == "")
+                        {
+                            continue;
+                        }
+                        if (line.StartsWith("#"))
+                        {
+                            continue;
+                        }
+                        String[] mangChuoi = line.Split(';');
+                        int topMargin = 0;
+                        Brush br = Brushes.Black;
+                        int lineBreakHeight = 0;
+                        String content = String.Empty;
+                        if (mangChuoi.Length == 5)
+                        {
+                            int fontsize = 8;
+                            if (true != Int32.TryParse(mangChuoi[1], out fontsize))
+                                fontsize = 8;
+                            if (true != Int32.TryParse(mangChuoi[4], out lineBreakHeight))
+                                lineBreakHeight = 0;
+                            fontCurrent = new System.Drawing.Font(mangChuoi[0], fontsize, mangChuoi[2] == "b" ? System.Drawing.FontStyle.Bold : (mangChuoi[2] == "i" ? System.Drawing.FontStyle.Italic : (mangChuoi[2] == "u" ? System.Drawing.FontStyle.Underline : System.Drawing.FontStyle.Regular)));
+                            content = mangChuoi[3];
+                        }
+                        else if (mangChuoi.Length == 2)
+                        {
+                            if (true != Int32.TryParse(mangChuoi[1], out lineBreakHeight))
+                                lineBreakHeight = 0;
+                            content = mangChuoi[0];
+                        }
+                        //===============
+                        if (content.Contains("{TenHang}"))
+                        {
+                            content = content.Replace("{TenHang}", item.TenHang);
+                        }
+                        if (content.Contains("{KieuGiat}"))
+                        {
+                            content = content.Replace("{KieuGiat}", item.TenKieuGiat);
+                        }
+                        if (content.Contains("{SoLuong}"))
+                        {
+                            content = content.Replace("{SoLuong}", item.Soluong.ToString());
+                        }
+                        if (content.Contains("{DonGia}"))
+                        {
+                            content = content.Replace("{DonGia}", String.Format("{0,10:0,0}", item.DonGia));
+                        }
+                        if (content.Contains("{GhiChu}"))
+                        {
+                            if (item.GhiChu != String.Empty)
+                                content = content.Replace("{GhiChu}", item.GhiChu);
+                            else
+                                content = "";
+                        }
+                        //===============
+                        if (content != String.Empty)
+                        {
+                            e.Graphics.DrawString(content, fontCurrent, br, 0, topMargin); topMargin += lineBreakHeight;
+                        }
+                    }
+                    file.Close();
+                }
             }
-            else
-            {   // In khổ to
-                InKhoTo(lstctphieu, e);
+        }
+
+        private void InTheoTemplate(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e)
+        {
+            string filePrintTemplate = @"template_In.txt";
+            String line = String.Empty;
+            Int64 tongtien = 0;
+            foreach (ChiTietPhieuEntity item in lstctphieu)
+            {
+                tongtien += item.Soluong * item.DonGia;
+            }
+            Int64 sotiendcgiam = Xuly.Xuly.TinhTienGiamGia(tongtien, (Int32)nudGiamGia.Value);
+            Int64 sotienphaitt = tongtien - sotiendcgiam;
+            Int64 sotiengiaonhan = 0;
+            if (chkPhiGiaoNhan.Checked)
+                sotiengiaonhan = Xuly.Xuly.TinhTienTangGia(sotienphaitt, _phigiaonhan);
+            sotienphaitt += sotiengiaonhan;
+            Int64 sotienkhtra = 0;
+            Int64.TryParse(txtSoTienKHDaTra.Text.Trim(), out sotienkhtra);
+            if (System.IO.File.Exists(filePrintTemplate))
+            {
+                var filestream = new System.IO.FileStream(filePrintTemplate, System.IO.FileMode.Open, System.IO.FileAccess.Read);
+                var file = new System.IO.StreamReader(filestream);
+                int lineCount = 0;
+                System.Drawing.Font fontCurrent = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
+                Brush br = Brushes.Black;
+                while ((line = file.ReadLine()) != null)
+                {
+                    lineCount++;
+                    if (line == "")
+                    {
+                        continue;
+                    }
+                    if (line.StartsWith("#"))
+                    {
+                        continue;
+                    }
+                    String[] mangChuoi = line.Split(';');
+                    int topMargin = 0;
+                    int lineBreakHeight = 0;
+                    String content = String.Empty;
+                    if (mangChuoi.Length == 5)
+                    {
+                        int fontsize = 8;
+                        if (true != Int32.TryParse(mangChuoi[1], out fontsize))
+                            fontsize = 8;
+                        if (true != Int32.TryParse(mangChuoi[4], out lineBreakHeight))
+                            lineBreakHeight = 0;
+                        fontCurrent = new System.Drawing.Font(mangChuoi[0], fontsize, mangChuoi[2] == "b" ? System.Drawing.FontStyle.Bold : (mangChuoi[2] == "i" ? System.Drawing.FontStyle.Italic : (mangChuoi[2] == "u" ? System.Drawing.FontStyle.Underline : System.Drawing.FontStyle.Regular)));
+                        content = mangChuoi[3];
+                    }
+                    else if (mangChuoi.Length == 2)
+                    {
+                        if (true != Int32.TryParse(mangChuoi[1], out lineBreakHeight))
+                            lineBreakHeight = 0;
+                        content = mangChuoi[0];
+                    }
+                    //===============
+                    if (content.Contains("{KhachHang}"))
+                    {
+                        if (!String.IsNullOrEmpty(txtTenKhachHang.Text.Trim()))
+                            content = content.Replace("{KhachHang}", txtTenKhachHang.Text);
+                    }
+                    if (content.Contains("{MaPhieu}"))
+                    {
+                        content = content.Replace("{MaPhieu}", _phieu.MaPhieu.ToString());
+                    }
+                    if (content.Contains("{NgayNhan}"))
+                    {
+                        content = content.Replace("{NgayNhan}", String.Format("{0:dd/MM/yyyy HH:mm}", _phieu.NgayLap));
+                    }
+                    if (content.Contains("{ChiTietPhieu}"))
+                    {
+                        this.InChiTietPhieuTemplate(lstctphieu, e);
+                        content = "";
+                    }
+                    if (content.Contains("{ThanhTien}"))
+                    {
+                        content = content.Replace("{ThanhTien}", String.Format("{0,10:0,0}", tongtien));
+                    }
+                    if (content.Contains("{GiamGia}"))
+                    {
+                        if (sotiendcgiam != 0)
+                            content = content.Replace("{GiamGia}", Convert.ToInt32(nudGiamGia.Value).ToString());
+                        else
+                            content = "";
+                    }
+                    if (content.Contains("{TienDuocGiam}"))
+                    {
+                        if (sotiendcgiam != 0)
+                            content = content.Replace("{TienDuocGiam}", String.Format("{0,10:0,0}", sotiendcgiam));
+                        else
+                            content = "";
+                    }
+                    if (content.Contains("{PhiGiaoNhan}"))
+                    {
+                        if (sotiengiaonhan != 0)
+                            content = content.Replace("{PhiGiaoNhan}", _phigiaonhan.ToString());
+                        else
+                            content = "";
+                    }
+                    if (content.Contains("{TienGiaoNhan}"))
+                    {
+                        if (sotiengiaonhan != 0)
+                            content = content.Replace("{TienGiaoNhan}", String.Format("{0,10:0,0}", sotiengiaonhan));
+                        else
+                            content = "";
+                    }
+                    if (content.Contains("{TongTien}"))
+                    {
+                        content = content.Replace("{TongTien}", String.Format("{0,10:0,0}", sotienphaitt));
+                    }
+                    if (content.Contains("{KHTra}"))
+                    {
+                        content = content.Replace("{KHTra}", String.Format("{0,10:0,0}", sotienkhtra));
+                    }
+                    if (content.Contains("{TienThua}"))
+                    {
+                        content = content.Replace("{TienThua}", String.Format("{0,10:0,0}", sotienkhtra - sotienphaitt));
+                    }
+                    if (content.Contains("{GhiChu}"))
+                    {
+                        if (!String.IsNullOrEmpty(txtGhiChu.Text))
+                            content = content.Replace("{GhiChu}", txtGhiChu.Text.Trim());
+                        else
+                            content = "";
+                    }
+                    if (content.Contains("{DaThanhToan}"))
+                    {
+                        if (chkDaThanhToan.Checked)
+                            content = "";
+                    }
+                    if (content.Contains("{NgayHenTra}"))
+                    {
+                        content = content.Replace("{NgayHenTra}", String.Format("{0:dd/MM/yyyy}", _phieu.NgayHenTra));
+                    }
+                    if (content.Contains("{NhanVien}"))
+                    {
+                        if (!String.IsNullOrEmpty(txtUserName.Text))
+                            content = content.Replace("{NhanVien}", txtUserName.Text);
+                        else
+                            content = "";
+                    }
+                    //===============
+                    if (content != String.Empty) {
+                        e.Graphics.DrawString(content, fontCurrent, br, 0, topMargin); topMargin += lineBreakHeight;
+                    }
+                }
+                file.Close();
             }
         }
 
@@ -386,7 +606,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
             Font fontRegular = new Font("Arial", 10, FontStyle.Regular);
             Font fontItalic = new Font("Arial", 8, FontStyle.Italic);
             Font fontSo = new Font("Courier New", 8, FontStyle.Bold);
-            Int32 RHeight = fontRegular.Height;
+            Int32 RHeight = fontRegular.Height; // 16
             Int32 BHeight = fontBold.Height;
             Brush br = Brushes.Black;
 
@@ -406,7 +626,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
             e.Graphics.DrawString("Ngày nhận: " + String.Format("{0:dd/MM/yyyy HH:mm}", _phieu.NgayLap), fontRegular, br, leftMargin, RHeight); RHeight += chinhno - 5;
             e.Graphics.DrawString("______________________________", fontItalic, br, leftMargin, RHeight); RHeight += chinhno;
             Int64 tongtien = 0;
-            fontRegular = new Font("Arial", 8, FontStyle.Regular); chinhno = fontRegular.Height;
+            fontRegular = new Font("Arial", 8, FontStyle.Regular); chinhno = fontRegular.Height;    // 13
             e.Graphics.DrawString("Đồ", fontRegular, br, leftMargin + 40, RHeight);
             e.Graphics.DrawString("SL", fontRegular, br, leftMargin + 85, RHeight);
             e.Graphics.DrawString("Đơn giá", fontRegular, br, leftMargin + 115, RHeight); RHeight += chinhno + 8;
@@ -473,8 +693,8 @@ namespace QuanLyTiemGiatLa.Danhmuc
             e.Graphics.DrawString("______________________________", fontItalic, br, leftMargin, RHeight); RHeight += chinhno;
             String str = "Khách hàng đã được phổ biến và" + "\n";
             str += " đồng ý với các lỗi có thể xảy ra" + "\n";
-            str += " sau khi sử dụng dịch vụ giặt là " + "\n";
-            str += "và đồng ý rằng sau 15 ngày kể từ " + "\n";
+            str += " sau khi sử dụng dịch vụ giặt là" + "\n";
+            str += "và đồng ý rằng sau 15 ngày kể từ" + "\n";
             str += "  ngày hẹn trả hàng Công ty sẽ" + "\n";
             str += "không chịu trách nhiệm đối với" + "\n";
             str += "    đồ giặt của khách hàng";
@@ -483,6 +703,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 e.Graphics.DrawString("NV: " + txtUserName.Text, fontRegular, br, leftMargin, RHeight);
         }
 
+        [Obsolete("Cửa hàng in khổ nhỏ, ko chơi khổ to")]
         private void InKhoTo(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e)
         {
             Int32 leftMargin = 0;
@@ -683,7 +904,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 //--------------------------
                 PrintDocument printDoc = new PrintDocument();
                 printDoc.PrintPage += new PrintPageEventHandler(printDoc_PrintHoaDon);
-                if (BienChung.isTrienKhai)
+                if (true == BienChung.isTrienKhai)
                 {
                     for (int i = 0; i < Xuly.ThaoTacIniCauHinhPhanMem.ReadSoLanIn(); i++)
                     {

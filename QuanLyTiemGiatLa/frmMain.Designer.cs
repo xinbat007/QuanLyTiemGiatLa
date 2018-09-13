@@ -34,8 +34,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblUser = new System.Windows.Forms.ToolStripStatusLabel();
-            this.tslCaps = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
-            this.tslNums = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
             this.tsslbPhienBan = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnLoaiHang = new System.Windows.Forms.Button();
@@ -64,7 +62,8 @@
             this.lapPhieuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nhungViecCanLamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.catDoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnCapNhat = new System.Windows.Forms.Button();
+            this.tslCaps = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
+            this.tslNums = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -109,27 +108,6 @@
             this.lblUser.Name = "lblUser";
             this.lblUser.Size = new System.Drawing.Size(122, 19);
             this.lblUser.Text = "toolStripStatusLabel1";
-            // 
-            // tslCaps
-            // 
-            this.tslCaps.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.tslCaps.Enabled = false;
-            this.tslCaps.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.CapsLock;
-            this.tslCaps.Name = "tslCaps";
-            this.tslCaps.Size = new System.Drawing.Size(40, 19);
-            this.tslCaps.Text = "CAPS";
-            // 
-            // tslNums
-            // 
-            this.tslNums.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.tslNums.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.NumLock;
-            this.tslNums.Name = "tslNums";
-            this.tslNums.Size = new System.Drawing.Size(39, 19);
-            this.tslNums.Text = "NUM";
             // 
             // tsslbPhienBan
             // 
@@ -226,34 +204,34 @@
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Palatino Linotype", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(239, 446);
+            this.label1.Location = new System.Drawing.Point(99, 406);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(527, 47);
+            this.label1.Size = new System.Drawing.Size(796, 47);
             this.label1.TabIndex = 8;
             this.label1.Text = "Quản lý tiệm giặt là MR.CLEAN";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Palatino Linotype", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(290, 503);
+            this.label2.Location = new System.Drawing.Point(99, 475);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(419, 38);
+            this.label2.Size = new System.Drawing.Size(796, 38);
             this.label2.TabIndex = 9;
             this.label2.Text = "149 Mai Hắc Đế - HBT - Hà Nội";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("Palatino Linotype", 21.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(336, 551);
+            this.label3.Location = new System.Drawing.Point(99, 544);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(338, 38);
+            this.label3.Size = new System.Drawing.Size(796, 38);
             this.label3.TabIndex = 10;
             this.label3.Text = "Điện thoại: 04. 3974 9000";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // btnDotGiamGia
             // 
@@ -287,7 +265,7 @@
             this.btnMucDoVip.Name = "btnMucDoVip";
             this.btnMucDoVip.Size = new System.Drawing.Size(102, 84);
             this.btnMucDoVip.TabIndex = 10;
-            this.btnMucDoVip.Text = "Loạ&i khách hàng";
+            this.btnMucDoVip.Text = "Kiểu khách hàng";
             this.btnMucDoVip.UseVisualStyleBackColor = true;
             this.btnMucDoVip.Click += new System.EventHandler(this.btnMucDoVip_Click);
             // 
@@ -355,10 +333,10 @@
             // btnThongKeTheoNhanVien
             // 
             this.btnThongKeTheoNhanVien.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnThongKeTheoNhanVien.Location = new System.Drawing.Point(664, 368);
+            this.btnThongKeTheoNhanVien.Location = new System.Drawing.Point(99, 368);
             this.btnThongKeTheoNhanVien.Margin = new System.Windows.Forms.Padding(4);
             this.btnThongKeTheoNhanVien.Name = "btnThongKeTheoNhanVien";
-            this.btnThongKeTheoNhanVien.Size = new System.Drawing.Size(102, 84);
+            this.btnThongKeTheoNhanVien.Size = new System.Drawing.Size(231, 34);
             this.btnThongKeTheoNhanVien.TabIndex = 14;
             this.btnThongKeTheoNhanVien.Text = "Thống kê theo NV";
             this.btnThongKeTheoNhanVien.UseVisualStyleBackColor = true;
@@ -443,18 +421,26 @@
             this.catDoToolStripMenuItem.Text = "Cat do";
             this.catDoToolStripMenuItem.Click += new System.EventHandler(this.catDoToolStripMenuItem_Click);
             // 
-            // btnCapNhat
+            // tslCaps
             // 
-            this.btnCapNhat.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnCapNhat.Location = new System.Drawing.Point(793, 368);
-            this.btnCapNhat.Margin = new System.Windows.Forms.Padding(4);
-            this.btnCapNhat.Name = "btnCapNhat";
-            this.btnCapNhat.Size = new System.Drawing.Size(102, 84);
-            this.btnCapNhat.TabIndex = 14;
-            this.btnCapNhat.Text = "Cập nhật mật khẩu";
-            this.btnCapNhat.UseVisualStyleBackColor = true;
-            this.btnCapNhat.Visible = false;
-            this.btnCapNhat.Click += new System.EventHandler(this.btnCapNhat_Click);
+            this.tslCaps.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.tslCaps.Enabled = false;
+            this.tslCaps.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.CapsLock;
+            this.tslCaps.Name = "tslCaps";
+            this.tslCaps.Size = new System.Drawing.Size(40, 19);
+            this.tslCaps.Text = "CAPS";
+            // 
+            // tslNums
+            // 
+            this.tslNums.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.tslNums.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.NumLock;
+            this.tslNums.Name = "tslNums";
+            this.tslNums.Size = new System.Drawing.Size(39, 19);
+            this.tslNums.Text = "NUM";
             // 
             // frmMain
             // 
@@ -481,7 +467,6 @@
             this.Controls.Add(this.btnNhanVien);
             this.Controls.Add(this.btnCauHinhHeThong);
             this.Controls.Add(this.btnThongKeTheoNhanVien);
-            this.Controls.Add(this.btnCapNhat);
             this.Controls.Add(this.btnDSChotKet);
             this.Controls.Add(this.btnThongKeThuNhap);
             this.Controls.Add(this.btnDotGiamGia);
@@ -533,7 +518,6 @@
 		private System.Windows.Forms.ToolStripMenuItem nhungViecCanLamToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem catDoToolStripMenuItem;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-		private System.Windows.Forms.Button btnCapNhat;
 		private ToolStripStatusKeyState tslCaps;
 		private ToolStripStatusKeyState tslNums;
 		private System.Windows.Forms.ToolStripStatusLabel tsslbPhienBan;

@@ -31,7 +31,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCauHinhHeThong));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.cboCatDoFocus = new System.Windows.Forms.ComboBox();
-            this.cboKhoMayIn = new System.Windows.Forms.ComboBox();
             this.chkToanManHinh = new System.Windows.Forms.CheckBox();
             this.label23 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -44,7 +43,6 @@
             this.nudTreEmGiamGia = new System.Windows.Forms.NumericUpDown();
             this.label10 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
@@ -59,6 +57,8 @@
             this.btnGhi = new System.Windows.Forms.Button();
             this.btnBackUp = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnMauDoPhieuHuy = new System.Windows.Forms.Button();
+            this.label24 = new System.Windows.Forms.Label();
             this.txtXoayVongDen = new System.Windows.Forms.TextBox();
             this.txtXoayVongTu = new System.Windows.Forms.TextBox();
             this.btnMauDoDaTra = new System.Windows.Forms.Button();
@@ -77,8 +77,6 @@
             this.label15 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
-            this.btnMauDoPhieuHuy = new System.Windows.Forms.Button();
-            this.label24 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.nudSoLanIn)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudViecCanLam)).BeginInit();
@@ -91,10 +89,9 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.cboCatDoFocus);
-            this.groupBox1.Controls.Add(this.cboKhoMayIn);
             this.groupBox1.Controls.Add(this.chkToanManHinh);
             this.groupBox1.Controls.Add(this.label23);
             this.groupBox1.Controls.Add(this.label4);
@@ -107,7 +104,6 @@
             this.groupBox1.Controls.Add(this.nudTreEmGiamGia);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.label12);
-            this.groupBox1.Controls.Add(this.label9);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.label22);
             this.groupBox1.Controls.Add(this.label5);
@@ -129,28 +125,16 @@
             this.cboCatDoFocus.Items.AddRange(new object[] {
             "Mã phiếu",
             "Mã vạch"});
-            this.cboCatDoFocus.Location = new System.Drawing.Point(193, 250);
+            this.cboCatDoFocus.Location = new System.Drawing.Point(193, 218);
             this.cboCatDoFocus.Name = "cboCatDoFocus";
             this.cboCatDoFocus.Size = new System.Drawing.Size(114, 28);
             this.cboCatDoFocus.TabIndex = 7;
-            // 
-            // cboKhoMayIn
-            // 
-            this.cboKhoMayIn.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboKhoMayIn.FormattingEnabled = true;
-            this.cboKhoMayIn.Items.AddRange(new object[] {
-            "Khổ nhỏ",
-            "Khổ to 8cm"});
-            this.cboKhoMayIn.Location = new System.Drawing.Point(193, 218);
-            this.cboKhoMayIn.Name = "cboKhoMayIn";
-            this.cboKhoMayIn.Size = new System.Drawing.Size(114, 28);
-            this.cboKhoMayIn.TabIndex = 6;
             // 
             // chkToanManHinh
             // 
             this.chkToanManHinh.AutoSize = true;
             this.chkToanManHinh.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.chkToanManHinh.Location = new System.Drawing.Point(70, 286);
+            this.chkToanManHinh.Location = new System.Drawing.Point(72, 253);
             this.chkToanManHinh.Name = "chkToanManHinh";
             this.chkToanManHinh.Size = new System.Drawing.Size(137, 24);
             this.chkToanManHinh.TabIndex = 8;
@@ -239,7 +223,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(84, 253);
+            this.label10.Location = new System.Drawing.Point(84, 221);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(103, 20);
             this.label10.TabIndex = 1;
@@ -253,15 +237,6 @@
             this.label12.Size = new System.Drawing.Size(74, 20);
             this.label12.TabIndex = 1;
             this.label12.Text = "Số lần in:";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(97, 221);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(90, 20);
-            this.label9.TabIndex = 1;
-            this.label9.Text = "Khổ máy in:";
             // 
             // label6
             // 
@@ -395,8 +370,8 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox2.Controls.Add(this.btnMauDoPhieuHuy);
             this.groupBox2.Controls.Add(this.label24);
             this.groupBox2.Controls.Add(this.txtXoayVongDen);
@@ -424,6 +399,24 @@
             this.groupBox2.Size = new System.Drawing.Size(318, 349);
             this.groupBox2.TabIndex = 1;
             this.groupBox2.TabStop = false;
+            // 
+            // btnMauDoPhieuHuy
+            // 
+            this.btnMauDoPhieuHuy.Location = new System.Drawing.Point(144, 250);
+            this.btnMauDoPhieuHuy.Name = "btnMauDoPhieuHuy";
+            this.btnMauDoPhieuHuy.Size = new System.Drawing.Size(75, 28);
+            this.btnMauDoPhieuHuy.TabIndex = 7;
+            this.btnMauDoPhieuHuy.UseVisualStyleBackColor = true;
+            this.btnMauDoPhieuHuy.Click += new System.EventHandler(this.btnMauDoPhieuHuy_Click);
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(5, 253);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(138, 20);
+            this.label24.TabIndex = 10;
+            this.label24.Text = "Màu đồ phiếu hủy:";
             // 
             // txtXoayVongDen
             // 
@@ -577,24 +570,6 @@
             this.label13.TabIndex = 0;
             this.label13.Text = "Màu đồ ghi chú:";
             // 
-            // btnMauDoPhieuHuy
-            // 
-            this.btnMauDoPhieuHuy.Location = new System.Drawing.Point(144, 250);
-            this.btnMauDoPhieuHuy.Name = "btnMauDoPhieuHuy";
-            this.btnMauDoPhieuHuy.Size = new System.Drawing.Size(75, 28);
-            this.btnMauDoPhieuHuy.TabIndex = 7;
-            this.btnMauDoPhieuHuy.UseVisualStyleBackColor = true;
-            this.btnMauDoPhieuHuy.Click += new System.EventHandler(this.btnMauDoPhieuHuy_Click);
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(5, 253);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(138, 20);
-            this.label24.TabIndex = 10;
-            this.label24.Text = "Màu đồ phiếu hủy:";
-            // 
             // frmCauHinhHeThong
             // 
             this.AcceptButton = this.btnGhi;
@@ -645,8 +620,6 @@
 		private System.Windows.Forms.NumericUpDown nudNgayLapTra;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.ComboBox cboKhoMayIn;
-		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label10;
 		private System.Windows.Forms.ComboBox cboCatDoFocus;
 		private System.Windows.Forms.NumericUpDown nudSoLanIn;
