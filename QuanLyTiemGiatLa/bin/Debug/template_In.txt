@@ -8,9 +8,9 @@
 # {KhachHang}, {MaPhieu}, {NgayLapPhieu}, {GiamGia}, {PhiGiaoNhan}, {TongTien}, {KHTra}, {TienThua}, {GhiChu}, {ChuaThanhToan}, {NgayHenTra}, {NhanVien}
 # Trường hợp là {ChiTietPhieu} sẽ được đọc ở file khác
 
-Arial;10;b;TIỆM GIẶT LÀ MR.CLEAN;20
+Arial;10;b;TIỆM GIẶT LÀ MR.CLEAN;18
 Arial;10;r;  149 Mai Hắc Đế, Hà Nội;18
-Arial;8;r;     ĐT: 0243.974 9000;16
+Arial;8;r;       ĐT: 0243.974 9000;16
 Arial;8;r;  *********************************;6
 Arial;12;b;          {MaPhieu};18
 Arial;8;r;  *********************************;10
@@ -21,8 +21,6 @@ Arial;8;r;       Đồ                SL          Đơn giá;5
 Arial;10;r;________________________;20
 {ChiTietPhieu};0
 Arial;10;r; ;-10
-Arial;10;r;________________________;20
-Arial;8;r;Mục tổng cộng;5
 Arial;10;r;________________________;20
 Arial;8;r;Thành tiền:;0
 Courier New;8;b;                {ThanhTien};16
