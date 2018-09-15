@@ -371,13 +371,14 @@ namespace QuanLyTiemGiatLa.Danhmuc
             this.InTheoTemplate(lstctphieu, e);
         }
 
-        private void InChiTietPhieuTemplate(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e)
+        private void InChiTietPhieuTemplate(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e, ref int topMargin)
         {
             string filePrintCTPhieuTemplate = @"template_In_ChiTietPhieu.txt";
             String line = String.Empty;
             if (System.IO.File.Exists(filePrintCTPhieuTemplate))
             {
                 System.Drawing.Font fontCurrent = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
+                Brush br = Brushes.Black;
                 foreach (ChiTietPhieuEntity item in lstctphieu)
                 {
                     var filestream = new System.IO.FileStream(filePrintCTPhieuTemplate, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -393,8 +394,6 @@ namespace QuanLyTiemGiatLa.Danhmuc
                             continue;
                         }
                         String[] mangChuoi = line.Split(';');
-                        int topMargin = 0;
-                        Brush br = Brushes.Black;
                         int lineBreakHeight = 0;
                         String content = String.Empty;
                         if (mangChuoi.Length == 5)
@@ -424,7 +423,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                         }
                         if (content.Contains("{SoLuong}"))
                         {
-                            content = content.Replace("{SoLuong}", item.Soluong.ToString());
+                            content = content.Replace("{SoLuong}", String.Format("{0,10}", item.Soluong));
                         }
                         if (content.Contains("{DonGia}"))
                         {
@@ -472,6 +471,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 int lineCount = 0;
                 System.Drawing.Font fontCurrent = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
                 Brush br = Brushes.Black;
+                int topMargin = 0;
                 while ((line = file.ReadLine()) != null)
                 {
                     lineCount++;
@@ -484,7 +484,6 @@ namespace QuanLyTiemGiatLa.Danhmuc
                         continue;
                     }
                     String[] mangChuoi = line.Split(';');
-                    int topMargin = 0;
                     int lineBreakHeight = 0;
                     String content = String.Empty;
                     if (mangChuoi.Length == 5)
@@ -519,7 +518,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                     }
                     if (content.Contains("{ChiTietPhieu}"))
                     {
-                        this.InChiTietPhieuTemplate(lstctphieu, e);
+                        this.InChiTietPhieuTemplate(lstctphieu, e, ref topMargin);
                         content = "";
                     }
                     if (content.Contains("{ThanhTien}"))
@@ -536,7 +535,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                     if (content.Contains("{TienDuocGiam}"))
                     {
                         if (sotiendcgiam != 0)
-                            content = content.Replace("{TienDuocGiam}", String.Format("{0,10:0,0}", sotiendcgiam));
+                            content = content.Replace("{TienDuocGiam}", String.Format("{0,10:0,0}", -sotiendcgiam));
                         else
                             content = "";
                     }
@@ -577,6 +576,8 @@ namespace QuanLyTiemGiatLa.Danhmuc
                     {
                         if (chkDaThanhToan.Checked)
                             content = "";
+                        else
+                            content = content.Replace("{DaThanhToan}", "");
                     }
                     if (content.Contains("{NgayHenTra}"))
                     {

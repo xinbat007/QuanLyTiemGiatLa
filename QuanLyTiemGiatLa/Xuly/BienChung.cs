@@ -12,7 +12,7 @@ namespace QuanLyTiemGiatLa
         public static Boolean DaMuaFull;
         public static Boolean DuocPhepSuDung;
         public static MauTrangThaiDo mautrangthaido;
-        public static bool isTrienKhai;
+        public static bool isTrienKhai = true;
         public static bool isToanManHinh = false;
     }
 }
