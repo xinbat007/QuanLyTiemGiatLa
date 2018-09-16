@@ -106,5 +106,17 @@ namespace QuanLyTiemGiatLa.Properties {
                 this["PassLoginHT"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string PathServerSync {
+            get {
+                return ((string)(this["PathServerSync"]));
+            }
+            set {
+                this["PathServerSync"] = value;
+            }
+        }
     }
 }

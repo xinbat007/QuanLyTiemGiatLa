@@ -38,6 +38,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -48,7 +52,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="vnConvert, Version=1.0.2723.36603, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <Private>False</Private>
+      <HintPath>..\lib\vnConvert.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -527,8 +531,6 @@
     <None Include="Resources\118632.png" />
     <None Include="Resources\ark232.png" />
     <None Include="Resources\Accounting.png" />
-    <Content Include="NhatKySuaDoi.txt">
-    </Content>
     <Content Include="GiatLaIcon.ico" />
     <Content Include="Resources\default.jpg" />
     <None Include="Resources\safe_ket.png" />

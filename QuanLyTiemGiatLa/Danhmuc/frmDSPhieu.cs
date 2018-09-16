@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using Entity;
 using Business;
+using Newtonsoft.Json;
 
 namespace QuanLyTiemGiatLa.Danhmuc
 {
@@ -39,6 +40,8 @@ namespace QuanLyTiemGiatLa.Danhmuc
             //TinhTienDaGiam();
             lblMessage.Text = "";
             //Xuly.Xuly.SapxepDataGrid(dgvDSPhieu);// Ko đc
+
+            //string json = JsonConvert.SerializeObject(lstPhieu);
         }
 
         private void VeDataGrid(ListPhieuEntity lstPhieu)
@@ -51,6 +54,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                     {
                         if (lstPhieu[i].IsPhieuHuy)
                         {
+                            dgvDSPhieu.Rows[i].Cells[7].Style.BackColor = BienChung.mautrangthaido.PhieuHuy;
                             for (int k = 0; k < dgvDSPhieu.ColumnCount; k++)
                             {
                                 dgvDSPhieu.Rows[i].Cells[k].Style.ForeColor = BienChung.mautrangthaido.PhieuHuy;
@@ -152,6 +156,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                     frm._phieu = phieu;
                     frm.onsaved = new OnSaved(this.LoadData);
                     frm.ShowDialog();
+
                 }
                 else
                     MessageBox.Show("Dữ liệu trống!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
