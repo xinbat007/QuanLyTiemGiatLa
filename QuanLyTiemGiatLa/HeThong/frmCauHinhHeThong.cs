@@ -33,7 +33,8 @@ namespace QuanLyTiemGiatLa.HeThong
                 txtXoayVongDen.Text = Xuly.ThaoTacIniMaVach.ReadMaVachKetThuc().ToString();
                 BienChung.mautrangthaido = Xuly.ThaoTacIniCauHinhPhanMem.ReadMauTrangThaiDo();
                 this.DoiMauButton();
-                btnBackUp.Enabled = (BienChung.userCurrent != null) ? (BienChung.userCurrent.ChucVu == Entity.ChucVu.Admin) : false;
+                if (BienChung.isTrienKhai)
+                    btnBackUp.Enabled = (BienChung.userCurrent != null) ? (BienChung.userCurrent.ChucVu == Entity.ChucVu.Admin) : false;
             }
             catch (System.Exception ex)
             {

@@ -1,0 +1,49 @@
+# Nếu có 5 phần tử
+# [Font chữ] ; [size] ; [style] ; [ nội dung ....] ; [khoảng cách xuống dòng]
+# style bao gồm: r:regular, b:bold, i:italic, u:underline
+# Nếu muốn font chữ như dòng trên => chỉ cần 2 phần tử
+# [ nội dung ....] ; [khoảng cách xuống dòng]
+
+# Trong nội dung có những biến sau được áp dụng
+# {KhachHang}, {MaPhieu}, {NgayLapPhieu}, {GiamGia}, {PhiGiaoNhan}, {TongTien}, {KHTra}, {TienThua}, {GhiChu}, {ChuaThanhToan}, {NgayHenTra}, {NhanVien}
+# Trường hợp là {ChiTietPhieu} sẽ được đọc ở file khác
+
+Arial;10;b;TIỆM GIẶT LÀ MR.CLEAN;18
+Arial;10;r;  149 Mai Hắc Đế, Hà Nội;18
+Arial;8;r;       ĐT: 0243.974 9000;16
+Arial;8;r;  *********************************;6
+Arial;12;b;          {MaPhieu};18
+Arial;8;r;  *********************************;10
+Arial;10;b; {KhachHang};20
+Arial;10;r;Ngày nhận: {NgayNhan};8
+________________________;20
+Arial;8;r;       Đồ                SL          Đơn giá;5
+Arial;10;r;________________________;20
+{ChiTietPhieu};0
+Arial;10;r; ;-10
+Arial;10;r;________________________;20
+Arial;8;r;Thành tiền:;0
+Courier New;8;b;                {ThanhTien};16
+Arial;8;r;Giảm giá: ({GiamGia}%);0
+Courier New;8;b;                {TienDuocGiam};16
+Arial;8;r;Phí ship: ({PhiGiaoNhan}%);0
+Courier New;8;b;                {TienGiaoNhan};16
+Arial;8;r;Tổng cộng:;0
+Courier New;8;b;                {TongTien};16
+Arial;8;r;Khách hàng trả:;0
+Courier New;8;b;                {KHTra};16
+Arial;8;r;Tiền thừa:;0
+Courier New;8;b;                {TienThua};16
+Arial;8;i;Ghi chú: {GhiChu};16
+Arial;8;b;{DaThanhToan}Chưa thanh toán;5
+______________________________;16
+Ngày hẹn trả hàng: {NgayHenTra};5
+______________________________;16
+Khách hàng đã được phổ biến và;16
+ đồng ý với các lỗi có thể xảy ra;16
+ sau khi sử dụng dịch vụ giặt là;16
+và đồng ý rằng sau 15 ngày kể từ;16
+  ngày hẹn trả hàng Công ty sẽ;16
+không chịu trách nhiệm đối với;16
+    đồ giặt của khách hàng;16
+Arial;8;r;NV: {NhanVien};16

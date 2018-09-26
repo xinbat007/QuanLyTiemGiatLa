@@ -3,8 +3,8 @@
 title Command
 @ECHO Please wait...
 
-::sqlcmd -S .\DATASQL -U sa -P 123456 -i a.sql -o a.txt
-sqlcmd -S .\SQLEXPRESS 			-i a.sql -o a.txt
+::sqlcmd -S .\SQLEXPRESS -U sa -P 123456 -i a.sql -o a.txt
+sqlcmd -S minhbui-pc\SQLEXPRESS -U sa -P sa 			-i a.sql -o a.txt
 
 
 ::mplay32 /play /close c:\windows\media\chimes.wav

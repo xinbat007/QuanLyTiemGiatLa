@@ -6,6 +6,7 @@ using System.IO;
 using QuanLyTiemGiatLa.Xuly;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System;
 
 namespace QuanLyTiemGiatLa.HeThong
 {
@@ -211,6 +212,123 @@ namespace QuanLyTiemGiatLa.HeThong
             catch (System.Exception ex)
             {
                 MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnBrowsePathCustomer_Click(object sender, System.EventArgs e)
+        {
+            var FD = new System.Windows.Forms.OpenFileDialog();
+            FD.Filter = "Json file (*.json)|*.json|" +
+                        "All file (*.*)|*.*";
+            FD.FilterIndex = 0;
+            if (FD.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    string fileToOpen = FD.FileName;
+                    txtPathJsonKH.Text = fileToOpen;
+                }
+                catch (System.Exception ex)
+                {
+                    MessageBox.Show("Không hỗ trợ định dạng này: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+        }
+
+        private bool checkFileJson(ref Entity.ListKhachHangEntity lst)
+        {
+            try
+            {
+                // read file into a string and deserialize JSON to a type
+                lst = JsonConvert.DeserializeObject<Entity.ListKhachHangEntity>(File.ReadAllText(txtPathJsonKH.Text));
+                return true;
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show("Json sai format:\n" + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+
+        private void btnImportCustomer_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(txtPathJsonKH.Text))
+                {
+                    MessageBox.Show("Đường dẫn file để import rỗng", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+                btnImportCustomer.Enabled = false;
+                Entity.ListKhachHangEntity lst = new Entity.ListKhachHangEntity();
+                if (this.checkFileJson(ref lst))
+                {
+                    pgbImportCustomer.Minimum = 0;
+                    pgbImportCustomer.Maximum = lst.Count;
+                    pgbImportCustomer.Visible = true;
+                    int countSuccess = 0;
+                    StreamWriter sw = new StreamWriter(".\\log_ImportCustomers.txt");
+                    for (int i = 0; i < lst.Count; ++i)
+                    {
+                        pgbImportCustomer.Value = i;
+                        Entity.KhachHangEntity kh = lst[i];
+                        if (string.IsNullOrEmpty(kh.DienThoai))
+                        {
+                            sw.WriteLine("Khách hàng mã '" + kh.MaKhachHang + " - " + kh.TenKhachHang + "' ko có SĐT");
+                            continue;
+                        }
+                        Int64 result = Business.KhachHangBO.InsertFromImport(kh);
+                        if (result <= 0)
+                        {
+                            sw.WriteLine("Khách hàng mã '" + kh.MaKhachHang + " - " + kh.TenKhachHang + "' đã trùng SĐT '" + kh.DienThoai + "'" +  result);
+                            continue;
+                        }
+                        countSuccess++;
+                        // muc do vip chua lam
+                    }
+                    sw.WriteLine("Thành công " + countSuccess + "/" + lst.Count + ". Loại " + (lst.Count - countSuccess) + " khách hàng.");
+                    sw.Close();
+                    MessageBox.Show("Nhập thành công " + countSuccess + "/" + lst.Count + ". Chi tiết xem ở file 'log_ImportCustomers.txt'", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                pgbImportCustomer.Visible = false;
+                btnImportCustomer.Enabled = true;
+            }
+        }
+
+        private void btnExportCustomer_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                btnExportCustomer.Enabled = false;
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "Json|*.json";
+                saveFileDialog1.Title = "Save an Json File";
+                saveFileDialog1.ShowDialog();
+                // If the file name is not an empty string open it for saving.  
+                if (saveFileDialog1.FileName != "")
+                {
+                    var khachhang = new Entity.KhachHangEntity();
+                    Entity.ListKhachHangEntity lst = Business.KhachHangBO.Search(khachhang);
+                    //https://www.newtonsoft.com/json/help/html/SerializeWithJsonSerializerToFile.htm
+                    // serialize JSON to a string and then write string to a file
+                    File.WriteAllText(saveFileDialog1.FileName, JsonConvert.SerializeObject(lst, Formatting.Indented));
+                    MessageBox.Show("Thành công " + lst.Count + " khách hàng!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnExportCustomer.Enabled = true;
             }
         }
     }

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Windows.Forms;
+using System.IO;
 using System.Drawing;
 using System.Drawing.Printing;
 using Business;
 using QuanLyTiemGiatLa.Danhmuc;
 using QuanLyTiemGiatLa.HeThong;
+using Newtonsoft.Json;
 
 namespace QuanLyTiemGiatLa
 {
@@ -145,35 +147,6 @@ namespace QuanLyTiemGiatLa
 
         private void btnCauHinhGiaDeDo_Click(object sender, EventArgs ev)
         {
-            string multimsg = string.Empty;
-            String line = String.Empty;
-            string filePrintTemplate = @"template_In.txt";
-            if (System.IO.File.Exists(filePrintTemplate)) { 
-                var filestream = new System.IO.FileStream(filePrintTemplate, System.IO.FileMode.Open, System.IO.FileAccess.Read);
-                var file = new System.IO.StreamReader(filestream);
-                int count = 0;
-                while ((line = file.ReadLine()) != null)
-                {
-                    count++;
-                    if (line == "")
-                    {
-                        multimsg += "Dong " + count + " empty\n";
-                        continue;
-                    }
-                    if (line.StartsWith("#"))
-                    {
-                        multimsg += "Dong " + count + " la ghi chu\n";
-                        continue;
-                    }
-                    multimsg += line + "\n";
-                }
-                System.Drawing.Font fontRegular = new System.Drawing.Font("Arial", 8, System.Drawing.FontStyle.Regular);
-                multimsg += fontRegular.Height;
-                MessageBox.Show(multimsg, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                file.Close();
-            }
-            return;
-
             if (_frmDSGiaDeDo == null || _frmDSGiaDeDo.IsDisposed)
             {
                 _frmDSGiaDeDo = new frmDSGiaDeDo();
@@ -396,7 +369,6 @@ namespace QuanLyTiemGiatLa
                     });
                     _timerAutoBackup.Start();
                 }
-
             }
             catch (System.Exception ex)
             {

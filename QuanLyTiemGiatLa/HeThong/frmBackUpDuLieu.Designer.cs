@@ -43,12 +43,19 @@
             this.btnThoat = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.btnTryConnect = new System.Windows.Forms.Button();
-            this.btnSync = new System.Windows.Forms.Button();
             this.txtPathServer = new System.Windows.Forms.TextBox();
+            this.btnSync = new System.Windows.Forms.Button();
+            this.btnTryConnect = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
+            this.btnExportCustomer = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnBrowsePathCustomer = new System.Windows.Forms.Button();
+            this.pgbImportCustomer = new System.Windows.Forms.ProgressBar();
+            this.txtPathJsonKH = new System.Windows.Forms.TextBox();
+            this.btnImportCustomer = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnBrowseCopyTo
@@ -98,7 +105,7 @@
             // 
             // btnBackUp
             // 
-            this.btnBackUp.Location = new System.Drawing.Point(262, 168);
+            this.btnBackUp.Location = new System.Drawing.Point(262, 135);
             this.btnBackUp.Name = "btnBackUp";
             this.btnBackUp.Size = new System.Drawing.Size(124, 47);
             this.btnBackUp.TabIndex = 12;
@@ -143,7 +150,7 @@
             // btnLuuCauHinh
             // 
             this.btnLuuCauHinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLuuCauHinh.Location = new System.Drawing.Point(627, 180);
+            this.btnLuuCauHinh.Location = new System.Drawing.Point(627, 262);
             this.btnLuuCauHinh.Name = "btnLuuCauHinh";
             this.btnLuuCauHinh.Size = new System.Drawing.Size(108, 47);
             this.btnLuuCauHinh.TabIndex = 20;
@@ -157,7 +164,7 @@
             this.btnThoat.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnThoat.Image = global::QuanLyTiemGiatLa.Properties.Resources.Exit16;
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(741, 180);
+            this.btnThoat.Location = new System.Drawing.Point(741, 262);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(89, 47);
             this.btnThoat.TabIndex = 21;
@@ -167,8 +174,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.txtDuongDanFile);
             this.groupBox1.Controls.Add(this.btnBackUp);
@@ -181,7 +186,7 @@
             this.groupBox1.Controls.Add(this.btnBrowseCopyTo);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(397, 221);
+            this.groupBox1.Size = new System.Drawing.Size(397, 196);
             this.groupBox1.TabIndex = 23;
             this.groupBox1.TabStop = false;
             // 
@@ -197,24 +202,12 @@
             this.groupBox2.TabIndex = 24;
             this.groupBox2.TabStop = false;
             // 
-            // label5
+            // txtPathServer
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(6, 22);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(171, 20);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "Đường dẫn server tổng";
-            // 
-            // btnTryConnect
-            // 
-            this.btnTryConnect.Location = new System.Drawing.Point(152, 87);
-            this.btnTryConnect.Name = "btnTryConnect";
-            this.btnTryConnect.Size = new System.Drawing.Size(113, 47);
-            this.btnTryConnect.TabIndex = 1;
-            this.btnTryConnect.Text = "Thử kết nối";
-            this.btnTryConnect.UseVisualStyleBackColor = true;
-            this.btnTryConnect.Click += new System.EventHandler(this.btnTryConnect_Click);
+            this.txtPathServer.Location = new System.Drawing.Point(10, 45);
+            this.txtPathServer.Name = "txtPathServer";
+            this.txtPathServer.Size = new System.Drawing.Size(405, 26);
+            this.txtPathServer.TabIndex = 4;
             // 
             // btnSync
             // 
@@ -226,18 +219,90 @@
             this.btnSync.UseVisualStyleBackColor = true;
             this.btnSync.Click += new System.EventHandler(this.btnSync_Click);
             // 
-            // txtPathServer
+            // btnTryConnect
             // 
-            this.txtPathServer.Location = new System.Drawing.Point(10, 45);
-            this.txtPathServer.Name = "txtPathServer";
-            this.txtPathServer.Size = new System.Drawing.Size(405, 26);
-            this.txtPathServer.TabIndex = 4;
+            this.btnTryConnect.Location = new System.Drawing.Point(152, 87);
+            this.btnTryConnect.Name = "btnTryConnect";
+            this.btnTryConnect.Size = new System.Drawing.Size(113, 47);
+            this.btnTryConnect.TabIndex = 1;
+            this.btnTryConnect.Text = "Thử kết nối";
+            this.btnTryConnect.UseVisualStyleBackColor = true;
+            this.btnTryConnect.Click += new System.EventHandler(this.btnTryConnect_Click);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(6, 22);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(171, 20);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "Đường dẫn server tổng";
+            // 
+            // btnExportCustomer
+            // 
+            this.btnExportCustomer.Location = new System.Drawing.Point(318, 69);
+            this.btnExportCustomer.Name = "btnExportCustomer";
+            this.btnExportCustomer.Size = new System.Drawing.Size(157, 26);
+            this.btnExportCustomer.TabIndex = 25;
+            this.btnExportCustomer.Text = "Xuất dữ liệu KH";
+            this.btnExportCustomer.UseVisualStyleBackColor = true;
+            this.btnExportCustomer.Click += new System.EventHandler(this.btnExportCustomer_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.btnBrowsePathCustomer);
+            this.groupBox3.Controls.Add(this.pgbImportCustomer);
+            this.groupBox3.Controls.Add(this.txtPathJsonKH);
+            this.groupBox3.Controls.Add(this.btnExportCustomer);
+            this.groupBox3.Controls.Add(this.btnImportCustomer);
+            this.groupBox3.Location = new System.Drawing.Point(12, 214);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(481, 105);
+            this.groupBox3.TabIndex = 26;
+            this.groupBox3.TabStop = false;
+            // 
+            // btnBrowsePathCustomer
+            // 
+            this.btnBrowsePathCustomer.Location = new System.Drawing.Point(283, 25);
+            this.btnBrowsePathCustomer.Name = "btnBrowsePathCustomer";
+            this.btnBrowsePathCustomer.Size = new System.Drawing.Size(29, 26);
+            this.btnBrowsePathCustomer.TabIndex = 20;
+            this.btnBrowsePathCustomer.Text = "...";
+            this.btnBrowsePathCustomer.UseVisualStyleBackColor = true;
+            this.btnBrowsePathCustomer.Click += new System.EventHandler(this.btnBrowsePathCustomer_Click);
+            // 
+            // pgbImportCustomer
+            // 
+            this.pgbImportCustomer.Location = new System.Drawing.Point(10, 69);
+            this.pgbImportCustomer.Name = "pgbImportCustomer";
+            this.pgbImportCustomer.Size = new System.Drawing.Size(302, 23);
+            this.pgbImportCustomer.TabIndex = 28;
+            this.pgbImportCustomer.Visible = false;
+            // 
+            // txtPathJsonKH
+            // 
+            this.txtPathJsonKH.Location = new System.Drawing.Point(10, 25);
+            this.txtPathJsonKH.Name = "txtPathJsonKH";
+            this.txtPathJsonKH.ReadOnly = true;
+            this.txtPathJsonKH.Size = new System.Drawing.Size(267, 26);
+            this.txtPathJsonKH.TabIndex = 27;
+            // 
+            // btnImportCustomer
+            // 
+            this.btnImportCustomer.Location = new System.Drawing.Point(318, 25);
+            this.btnImportCustomer.Name = "btnImportCustomer";
+            this.btnImportCustomer.Size = new System.Drawing.Size(157, 26);
+            this.btnImportCustomer.TabIndex = 26;
+            this.btnImportCustomer.Text = "Nhập dữ liệu KH";
+            this.btnImportCustomer.UseVisualStyleBackColor = true;
+            this.btnImportCustomer.Click += new System.EventHandler(this.btnImportCustomer_Click);
             // 
             // frmBackUpDuLieu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(859, 245);
+            this.ClientSize = new System.Drawing.Size(859, 327);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnThoat);
             this.Controls.Add(this.groupBox1);
@@ -253,6 +318,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -277,5 +344,11 @@
         private System.Windows.Forms.Button btnSync;
         private System.Windows.Forms.Button btnTryConnect;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Button btnExportCustomer;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Button btnBrowsePathCustomer;
+        private System.Windows.Forms.ProgressBar pgbImportCustomer;
+        private System.Windows.Forms.TextBox txtPathJsonKH;
+        private System.Windows.Forms.Button btnImportCustomer;
     }
 }
