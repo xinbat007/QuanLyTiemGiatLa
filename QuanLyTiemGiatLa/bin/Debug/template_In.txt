@@ -8,42 +8,54 @@
 # {KhachHang}, {MaPhieu}, {NgayLapPhieu}, {GiamGia}, {PhiGiaoNhan}, {TongTien}, {KHTra}, {TienThua}, {GhiChu}, {ChuaThanhToan}, {NgayHenTra}, {NhanVien}
 # Trường hợp là {ChiTietPhieu} sẽ được đọc ở file khác
 
-Arial;10;b;TIỆM GIẶT LÀ MR.CLEAN;18
-Arial;10;r;  149 Mai Hắc Đế, Hà Nội;18
-Arial;8;r;       ĐT: 0243.974 9000;16
-Arial;8;r;  *********************************;6
-Arial;12;b;          {MaPhieu};18
-Arial;8;r;  *********************************;10
-Arial;10;b; {KhachHang};20
+Arial;10;b;        TIỆM GIẶT LÀ MR.CLEAN;18
+Arial;10;r;          149 Mai Hắc Đế, Hà Nội;18
+Arial;8;r;                  ĐT: 0243.974 9000;16
+Arial;8;r;        ********************************************;6
+Arial;12;b;                  {MaPhieu};18
+Arial;8;r;        ********************************************;10
+Arial;10;r;Khách hàng:;0
+Arial;10;b;                    {KhachHang};20
 Arial;10;r;Ngày nhận: {NgayNhan};8
-________________________;20
-Arial;8;r;       Đồ                SL          Đơn giá;5
-Arial;10;r;________________________;20
+___________________________________;20
+Arial;8;r;       Đồ                    SL        Đơn giá         Thành tiền;5
+Arial;10;r;___________________________________;20
 {ChiTietPhieu};0
 Arial;10;r; ;-10
-Arial;10;r;________________________;20
+Arial;10;r;___________________________________;20
 Arial;8;r;Thành tiền:;0
-Courier New;8;b;                {ThanhTien};16
+Courier New;8;b;        ({SLDo} sp);0
+Courier New;8;b;                           {ThanhTien};16
 Arial;8;r;Giảm giá: ({GiamGia}%);0
-Courier New;8;b;                {TienDuocGiam};16
+Courier New;8;b;                           {TienDuocGiam};16
 Arial;8;r;Phí ship: ({PhiGiaoNhan}%);0
-Courier New;8;b;                {TienGiaoNhan};16
+Courier New;8;b;                           {TienGiaoNhan};16
 Arial;8;r;Tổng cộng:;0
-Courier New;8;b;                {TongTien};16
+Courier New;8;b;                           {TongTien};16
 Arial;8;r;Khách hàng trả:;0
-Courier New;8;b;                {KHTra};16
+Courier New;8;b;                           {KHTra};16
 Arial;8;r;Tiền thừa:;0
-Courier New;8;b;                {TienThua};16
+Courier New;8;b;                           {TienThua};16
 Arial;8;i;Ghi chú: {GhiChu};16
-Arial;8;b;{DaThanhToan}Chưa thanh toán;5
-______________________________;16
-Ngày hẹn trả hàng: {NgayHenTra};5
-______________________________;16
-Khách hàng đã được phổ biến và;16
- đồng ý với các lỗi có thể xảy ra;16
- sau khi sử dụng dịch vụ giặt là;16
-và đồng ý rằng sau 15 ngày kể từ;16
-  ngày hẹn trả hàng Công ty sẽ;16
-không chịu trách nhiệm đối với;16
-    đồ giặt của khách hàng;16
-Arial;8;r;NV: {NhanVien};16
+Arial;8;b;{DaThanhToan}Chưa thanh toán;16
+Arial;9;r;{LienKH} Quý khách đã đồng ý rủi ro khi giặt đồ được in;25
+Arial;9;r;{LienKH}trên hóa đơn: . . . . . . . . . . . . . . . . . . . . . . . . . . .;16
+Arial;8;r;(Mã vạch: {MaVach});5
+Arial;10;r;___________________________________;20
+Arial;8;b;         Ngày hẹn trả hàng: chiều {NgayHenTra};5
+Arial;10;r;___________________________________;20
+Arial;9;r;{LienKH}Công ty không chịu trách nhiệm đối với đồ giặt bị;16
+{LienKH}   co, loang màu và các hư hỏng khác như khuy,;16
+{LienKH}  khóa, vật trang trí... khi nguyên nhân là do chất;16
+{LienKH}  lượng của vải, nhuộm, khuy,khóa, vật trang trí;16
+{LienKH}             của đồ giặt không đảm bảo.;16
+Arial;9;b;{LienKH}Đền bù với mọi rủi ro, hư hỏng, mất mát không;16
+{LienKH} vượt quá 10 lần giá dịch vụ giặt là của đồ giặt;16
+{LienKH}               và phải có hóa đơn gốc.;16
+Arial;9;r;{LienKH}Đề nghị Quý khách kiểm tra hàng cẩn thận trước;16
+{LienKH}khi nhận. Mọi khiếu nại sau đó sẽ không được;16
+{LienKH}                         giải quyết.;16
+{LienKH} Quý khách đã được phổ biến và đồng ý với các;16
+{LienKH}         nội quy sử dụng dịch vụ của Mr.Clean.;16
+Arial;9;b;{LienKH}     Xin cám ơn Quý khách đã chọn Mr.Clean;18
+Arial;8;r;NV: {NhanVien} (Liên {Lien});16

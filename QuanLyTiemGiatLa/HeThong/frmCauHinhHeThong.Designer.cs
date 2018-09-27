@@ -321,6 +321,8 @@
             // 
             this.chkDungMaVach.AutoSize = true;
             this.chkDungMaVach.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.chkDungMaVach.Checked = true;
+            this.chkDungMaVach.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkDungMaVach.Location = new System.Drawing.Point(6, 286);
             this.chkDungMaVach.Name = "chkDungMaVach";
             this.chkDungMaVach.Size = new System.Drawing.Size(134, 24);

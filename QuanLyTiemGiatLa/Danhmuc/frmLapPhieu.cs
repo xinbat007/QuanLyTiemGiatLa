@@ -369,6 +369,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 return;
             }
             this.InTheoTemplate(lstctphieu, e);
+            //this.InKhoTo(lstctphieu, e);
         }
 
         private void InChiTietPhieuTemplate(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e, ref int topMargin)
@@ -429,6 +430,10 @@ namespace QuanLyTiemGiatLa.Danhmuc
                         {
                             content = content.Replace("{DonGia}", String.Format("{0,10:0,0}", item.DonGia));
                         }
+                        if (content.Contains("{ThanhTien}"))
+                        {
+                            content = content.Replace("{ThanhTien}", String.Format("{0,10:0,0}", item.DonGia * item.Soluong));
+                        }
                         if (content.Contains("{GhiChu}"))
                         {
                             if (item.GhiChu != String.Empty)
@@ -463,7 +468,11 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 sotiengiaonhan = Xuly.Xuly.TinhTienTangGia(sotienphaitt, _phigiaonhan);
             sotienphaitt += sotiengiaonhan;
             Int64 sotienkhtra = 0;
-            Int64.TryParse(txtSoTienKHDaTra.Text.Trim(), out sotienkhtra);
+            if (chkDaThanhToan.Checked)
+            {
+                if (string.IsNullOrEmpty(txtSoTienKHDaTra.Text.Trim()) || !Int64.TryParse(txtSoTienKHDaTra.Text.Trim(), out sotienkhtra))
+                    sotienkhtra = sotienphaitt;
+            }
             if (System.IO.File.Exists(filePrintTemplate))
             {
                 var filestream = new System.IO.FileStream(filePrintTemplate, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -521,6 +530,10 @@ namespace QuanLyTiemGiatLa.Danhmuc
                         this.InChiTietPhieuTemplate(lstctphieu, e, ref topMargin);
                         content = "";
                     }
+                    if (content.Contains("{SLDo}"))
+                    {
+                        content = content.Replace("{SLDo}", String.Format("{0,2:0,0}", txtTongSoSanPham.Text));
+                    }
                     if (content.Contains("{ThanhTien}"))
                     {
                         content = content.Replace("{ThanhTien}", String.Format("{0,10:0,0}", tongtien));
@@ -559,11 +572,11 @@ namespace QuanLyTiemGiatLa.Danhmuc
                     }
                     if (content.Contains("{KHTra}"))
                     {
-                        content = content.Replace("{KHTra}", String.Format("{0,10:0,0}", sotienkhtra));
+                        content = content.Replace("{KHTra}", sotienkhtra == 0 ? "         0" : String.Format("{0,10:0,0}", -sotienkhtra));
                     }
                     if (content.Contains("{TienThua}"))
                     {
-                        content = content.Replace("{TienThua}", String.Format("{0,10:0,0}", sotienkhtra - sotienphaitt));
+                        content = content.Replace("{TienThua}", (sotienkhtra - sotienphaitt) == 0 ? "         0" : String.Format("{0,10:0,0}", sotienkhtra - sotienphaitt));
                     }
                     if (content.Contains("{GhiChu}"))
                     {
@@ -579,6 +592,10 @@ namespace QuanLyTiemGiatLa.Danhmuc
                         else
                             content = content.Replace("{DaThanhToan}", "");
                     }
+                    if (content.Contains("{MaVach}"))
+                    {
+                        content = content.Replace("{MaVach}", txtMaVachDauTien.Text == txtMaVachCuoi.Text ? txtMaVachCuoi.Text : (txtMaVachDauTien.Text + " -> " + txtMaVachCuoi.Text));
+                    }
                     if (content.Contains("{NgayHenTra}"))
                     {
                         content = content.Replace("{NgayHenTra}", String.Format("{0:dd/MM/yyyy}", _phieu.NgayHenTra));
@@ -590,6 +607,17 @@ namespace QuanLyTiemGiatLa.Danhmuc
                         else
                             content = "";
                     }
+                    if (content.Contains("{LienKH}"))
+                    {
+                        if (_phieu.SoLanIn == 0 /*|| !BienChung.isTrienKhai*/)
+                            content = content.Replace("{LienKH}", "");
+                        else
+                            content = "";
+                    }
+                    if (content.Contains("{Lien}"))
+                    {
+                        content = content.Replace("{Lien}", (_phieu.SoLanIn + 1) + (_phieu.SoLanIn == 0 ? ": Khách hàng" : ": Nội bộ"));
+                    }
                     //===============
                     if (content != String.Empty) {
                         e.Graphics.DrawString(content, fontCurrent, br, 0, topMargin); topMargin += lineBreakHeight;
@@ -599,6 +627,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
             }
         }
 
+        [Obsolete("Cửa hàng in khổ to, ko chơi khổ nhỏ")]
         private void InKhoNho(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e)
         {
             Int32 leftMargin = 0;
@@ -704,7 +733,6 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 e.Graphics.DrawString("NV: " + txtUserName.Text, fontRegular, br, leftMargin, RHeight);
         }
 
-        [Obsolete("Cửa hàng in khổ nhỏ, ko chơi khổ to")]
         private void InKhoTo(ListChiTietPhieuEntity lstctphieu, PrintPageEventArgs e)
         {
             Int32 leftMargin = 0;
@@ -843,11 +871,10 @@ namespace QuanLyTiemGiatLa.Danhmuc
             str = string.Empty;
             if (!String.IsNullOrEmpty(txtUserName.Text)) str += "NV: " + txtUserName.Text;
             str += "   (Liên " + (_phieu.SoLanIn + 1);
-            str += _phieu.SoLanIn == 0 ? ": Khách hàng)" : " Nội bộ)";
+            str += (_phieu.SoLanIn == 0) ? ": Khách hàng)" : " Nội bộ)";
             e.Graphics.DrawString(str, fontRegular, br, leftMargin, RHeight);
             //------------------------------------------
         }
-
         #endregion
 
         private void btnInHoaDon_Click(object sender, EventArgs e)
@@ -1041,11 +1068,16 @@ namespace QuanLyTiemGiatLa.Danhmuc
                 _phieu.TongTien += sotienvanchuyen;
                 lblThanhTien.Text = tongtien == 0 ? "0" : String.Format("{0,8:0,0}", tongtien);
                 lblTongTien.Text = _phieu.TongTien == 0 ? "0" : String.Format("{0,8:0,0}", _phieu.TongTien);
+                string tienKH = txtSoTienKHDaTra.Text.Trim();
                 Int64 sotienkhtra = 0;
-                if (Int64.TryParse(txtSoTienKHDaTra.Text.Trim(), out sotienkhtra))
+                if (!string.IsNullOrEmpty(tienKH) && Int64.TryParse(tienKH, out sotienkhtra))
+                {
                     lblTienTraLai.Text = String.Format("{0,8:0,0}", sotienkhtra - _phieu.TongTien);
+                }
                 else
+                {
                     lblTienTraLai.Text = "0";
+                }
             }
         }
 

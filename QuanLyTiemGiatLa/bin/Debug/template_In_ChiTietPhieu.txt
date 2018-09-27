@@ -1,5 +1,6 @@
-Arial;8;r;  {TenHang};13
-Arial;8;i;      {KieuGiat};0
-Courier New;8;b;     {SoLuong};0
-                {DonGia};13
+Arial;8;r; {TenHang};13
+Arial;8;i;   {KieuGiat};0
+Courier New;8;b;      {SoLuong};0
+                {DonGia};0
+                           {ThanhTien};013
 Arial;8;i;      ({GhiChu});13

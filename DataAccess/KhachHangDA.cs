@@ -339,34 +339,21 @@ namespace DataAccess
             SqlCommand command = DUtils.GetCommand();
             command.CommandType = System.Data.CommandType.Text;
             command.CommandText = @"
-BEGIN
-    IF EXISTS (SELECT * FROM [QuanLyTiemGiatLa].[dbo].[KhachHang] WHERE [DienThoai] = @DienThoai)
-    BEGIN
-    END
-    ELSE
+    IF NOT EXISTS (SELECT * FROM [QuanLyTiemGiatLa].[dbo].[KhachHang] WHERE [DienThoai] = '" + khachhang.DienThoai + @"')
     BEGIN
         INSERT INTO [QuanLyTiemGiatLa].[dbo].[KhachHang]
                    ([TenKhachHang]
                    ,[DiaChi]
                    ,[DienThoai])
              VALUES
-                   (@TenKhachHang
-                   ,@DiaChi
-                   ,@DienThoai);
+                   ('" + khachhang.TenKhachHang + @"'
+                   ," + (string.IsNullOrEmpty(khachhang.DiaChi) ? "null" : "'" + khachhang.DiaChi + "'") + @"
+                   ,'" + khachhang.DienThoai + @"');
         SELECT SCOPE_IDENTITY();
     END
-END
 ";
-            SqlParameter param = new SqlParameter("@TenKhachHang", SqlDbType.NVarChar, 100);
-            param.Value = khachhang.TenKhachHang;
-            command.Parameters.Add(param);
-            param = new SqlParameter("@DiaChi", SqlDbType.NVarChar, 200);
-            param.Value = String.IsNullOrEmpty(khachhang.DiaChi) ? null : khachhang.DiaChi;
-            command.Parameters.Add(param);
-            param = new SqlParameter("@DienThoai", SqlDbType.NVarChar, 20);
-            param.Value = String.IsNullOrEmpty(khachhang.DienThoai) ? null : khachhang.DienThoai;
-            command.Parameters.Add(param);
-            return Int64.Parse(command.ExecuteScalar().ToString());
+            object result = command.ExecuteScalar();
+            return result == null ? -1 : Int64.Parse(result.ToString());
         }
 
         public static Int32 Update(KhachHangEntity khachhang)

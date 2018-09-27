@@ -34,6 +34,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.lblUser = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tslCaps = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
+            this.tslNums = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
             this.tsslbPhienBan = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnLoaiHang = new System.Windows.Forms.Button();
@@ -62,8 +64,6 @@
             this.lapPhieuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nhungViecCanLamToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.catDoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tslCaps = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
-            this.tslNums = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -109,6 +109,27 @@
             this.lblUser.Size = new System.Drawing.Size(122, 19);
             this.lblUser.Text = "toolStripStatusLabel1";
             // 
+            // tslCaps
+            // 
+            this.tslCaps.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.tslCaps.Enabled = false;
+            this.tslCaps.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.CapsLock;
+            this.tslCaps.Name = "tslCaps";
+            this.tslCaps.Size = new System.Drawing.Size(40, 19);
+            this.tslCaps.Text = "CAPS";
+            // 
+            // tslNums
+            // 
+            this.tslNums.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.tslNums.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.NumLock;
+            this.tslNums.Name = "tslNums";
+            this.tslNums.Size = new System.Drawing.Size(39, 19);
+            this.tslNums.Text = "NUM";
+            // 
             // tsslbPhienBan
             // 
             this.tsslbPhienBan.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
@@ -124,10 +145,10 @@
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(725, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(694, 19);
             this.toolStripStatusLabel1.Spring = true;
-            this.toolStripStatusLabel1.Text = "Mọi chi tiết về phần mềm xin quý khách vui lòng liên hệ: thienpq88@gmail.com - 01" +
-    "69.817.2860";
+            this.toolStripStatusLabel1.Text = "Mọi chi tiết về phần mềm xin quý khách vui lòng liên hệ: thienpq88@gmail.com - 03" +
+    "9.817.2860";
             this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // btnLoaiHang
@@ -420,27 +441,6 @@
             this.catDoToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.catDoToolStripMenuItem.Text = "Cat do";
             this.catDoToolStripMenuItem.Click += new System.EventHandler(this.catDoToolStripMenuItem_Click);
-            // 
-            // tslCaps
-            // 
-            this.tslCaps.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.tslCaps.Enabled = false;
-            this.tslCaps.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.CapsLock;
-            this.tslCaps.Name = "tslCaps";
-            this.tslCaps.Size = new System.Drawing.Size(40, 19);
-            this.tslCaps.Text = "CAPS";
-            // 
-            // tslNums
-            // 
-            this.tslNums.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
-            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.tslNums.KeyStyle = QuanLyTiemGiatLa.ToolStripStatusKeyState.KeyStatePanelStyle.NumLock;
-            this.tslNums.Name = "tslNums";
-            this.tslNums.Size = new System.Drawing.Size(39, 19);
-            this.tslNums.Text = "NUM";
             // 
             // frmMain
             // 

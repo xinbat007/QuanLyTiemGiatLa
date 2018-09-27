@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using System.Data.SqlClient;
+using Microsoft.Win32;
 
 namespace QuanLyTiemGiatLa.HeThong
 {
@@ -26,6 +27,13 @@ namespace QuanLyTiemGiatLa.HeThong
                 Properties.Settings.Default.TenLoginHT = chkRemember.Checked ? txtUsername.Text : "";
                 Properties.Settings.Default.PassLoginHT = chkRemember.Checked ? txtPassword.Text : "";
                 Properties.Settings.Default.Save();
+                // Save to regedit if everyone forget its password
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software", true);
+                key.CreateSubKey("QLTGL");
+                key = key.OpenSubKey("QLTGL", true);
+                key.SetValue("ServerName", txtServerName.Text);
+                key.SetValue("UserNameServer", txtSA.Text);
+                key.SetValue("PasswordServer", txt123456.Text);
             }
             catch (System.Exception ex)
             {

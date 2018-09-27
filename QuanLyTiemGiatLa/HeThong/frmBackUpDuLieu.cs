@@ -274,18 +274,20 @@ namespace QuanLyTiemGiatLa.HeThong
                         Entity.KhachHangEntity kh = lst[i];
                         if (string.IsNullOrEmpty(kh.DienThoai))
                         {
-                            sw.WriteLine("Khách hàng mã '" + kh.MaKhachHang + " - " + kh.TenKhachHang + "' ko có SĐT");
+                            sw.WriteLine("Lỗi: Khách hàng mã '" + kh.MaKhachHang + " - " + kh.TenKhachHang + "' ko có SĐT.");
                             continue;
                         }
                         Int64 result = Business.KhachHangBO.InsertFromImport(kh);
                         if (result <= 0)
                         {
-                            sw.WriteLine("Khách hàng mã '" + kh.MaKhachHang + " - " + kh.TenKhachHang + "' đã trùng SĐT '" + kh.DienThoai + "'" +  result);
+                            sw.WriteLine("Lỗi: Khách hàng mã '" + kh.MaKhachHang + " - " + kh.TenKhachHang + "' đã trùng SĐT '" + kh.DienThoai + "'.");
                             continue;
                         }
+                        sw.WriteLine("Thành công: Khách hàng mã '" + kh.MaKhachHang + " - " + kh.TenKhachHang + " - " + kh.DienThoai + "' đc thêm vào với mã '" + result + "'");
                         countSuccess++;
                         // muc do vip chua lam
                     }
+                    sw.WriteLine("====================");
                     sw.WriteLine("Thành công " + countSuccess + "/" + lst.Count + ". Loại " + (lst.Count - countSuccess) + " khách hàng.");
                     sw.Close();
                     MessageBox.Show("Nhập thành công " + countSuccess + "/" + lst.Count + ". Chi tiết xem ở file 'log_ImportCustomers.txt'", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
