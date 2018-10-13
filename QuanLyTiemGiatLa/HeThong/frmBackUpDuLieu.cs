@@ -7,6 +7,7 @@ using QuanLyTiemGiatLa.Xuly;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
+using Entity;
 
 namespace QuanLyTiemGiatLa.HeThong
 {
@@ -331,6 +332,62 @@ namespace QuanLyTiemGiatLa.HeThong
             finally
             {
                 btnExportCustomer.Enabled = true;
+            }
+        }
+
+        private void btnExportBill_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                btnExportBill.Enabled = false;
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "Json|*.json";
+                saveFileDialog1.Title = "Save an Json File";
+                saveFileDialog1.ShowDialog();
+                // If the file name is not an empty string open it for saving.  
+                if (saveFileDialog1.FileName != "")
+                {
+                    var khachhang = new Entity.KhachHangEntity();
+                    ListPhieuEntity lst = Business.PhieuBO.SelectNangCao(true, false, 0, "", "", false, DateTime.Now, DateTime.Now);
+                    File.WriteAllText(saveFileDialog1.FileName, JsonConvert.SerializeObject(lst, Formatting.Indented));
+                    MessageBox.Show("Thành công " + lst.Count + " phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnExportBill.Enabled = true;
+            }
+        }
+
+        private void btnExportBillDetail_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                btnExportBillDetail.Enabled = false;
+                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+                saveFileDialog1.Filter = "Json|*.json";
+                saveFileDialog1.Title = "Save an Json File";
+                saveFileDialog1.ShowDialog();
+                // If the file name is not an empty string open it for saving.  
+                if (saveFileDialog1.FileName != "")
+                {
+                    var khachhang = new Entity.KhachHangEntity();
+                    ListChiTietPhieuEntity lst = Business.ChiTietPhieuBO.SelectAll();
+                    File.WriteAllText(saveFileDialog1.FileName, JsonConvert.SerializeObject(lst, Formatting.Indented));
+                    MessageBox.Show("Thành công " + lst.Count + " chi tiết phiếu!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnExportBillDetail.Enabled = true;
             }
         }
     }

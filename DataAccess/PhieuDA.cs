@@ -13,7 +13,7 @@ namespace DataAccess
             command.CommandType = System.Data.CommandType.StoredProcedure;
             command.CommandText = "[dbo].[sp_Phieu_SelectByMaPhieu]";
 
-            SqlParameter param = new SqlParameter("@maphieu", SqlDbType.BigInt, 8);
+            SqlParameter param = new SqlParameter("@MaPhieu", SqlDbType.BigInt, 8);
             param.Value = maphieu;
             command.Parameters.Add(param);
 

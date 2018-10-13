@@ -53,6 +53,8 @@
             this.pgbImportCustomer = new System.Windows.Forms.ProgressBar();
             this.txtPathJsonKH = new System.Windows.Forms.TextBox();
             this.btnImportCustomer = new System.Windows.Forms.Button();
+            this.btnExportBill = new System.Windows.Forms.Button();
+            this.btnExportBillDetail = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -150,7 +152,7 @@
             // btnLuuCauHinh
             // 
             this.btnLuuCauHinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLuuCauHinh.Location = new System.Drawing.Point(627, 262);
+            this.btnLuuCauHinh.Location = new System.Drawing.Point(627, 260);
             this.btnLuuCauHinh.Name = "btnLuuCauHinh";
             this.btnLuuCauHinh.Size = new System.Drawing.Size(108, 47);
             this.btnLuuCauHinh.TabIndex = 20;
@@ -164,7 +166,7 @@
             this.btnThoat.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnThoat.Image = global::QuanLyTiemGiatLa.Properties.Resources.Exit16;
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(741, 262);
+            this.btnThoat.Location = new System.Drawing.Point(741, 260);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(89, 47);
             this.btnThoat.TabIndex = 21;
@@ -297,11 +299,33 @@
             this.btnImportCustomer.UseVisualStyleBackColor = true;
             this.btnImportCustomer.Click += new System.EventHandler(this.btnImportCustomer_Click);
             // 
+            // btnExportBill
+            // 
+            this.btnExportBill.Location = new System.Drawing.Point(524, 175);
+            this.btnExportBill.Name = "btnExportBill";
+            this.btnExportBill.Size = new System.Drawing.Size(150, 33);
+            this.btnExportBill.TabIndex = 27;
+            this.btnExportBill.Text = "Xuất phiếu";
+            this.btnExportBill.UseVisualStyleBackColor = true;
+            this.btnExportBill.Click += new System.EventHandler(this.btnExportBill_Click);
+            // 
+            // btnExportBillDetail
+            // 
+            this.btnExportBillDetail.Location = new System.Drawing.Point(680, 175);
+            this.btnExportBillDetail.Name = "btnExportBillDetail";
+            this.btnExportBillDetail.Size = new System.Drawing.Size(150, 33);
+            this.btnExportBillDetail.TabIndex = 28;
+            this.btnExportBillDetail.Text = "Xuất chi tiết phiếu";
+            this.btnExportBillDetail.UseVisualStyleBackColor = true;
+            this.btnExportBillDetail.Click += new System.EventHandler(this.btnExportBillDetail_Click);
+            // 
             // frmBackUpDuLieu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(859, 327);
+            this.ClientSize = new System.Drawing.Size(859, 325);
+            this.Controls.Add(this.btnExportBillDetail);
+            this.Controls.Add(this.btnExportBill);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnThoat);
@@ -350,5 +374,7 @@
         private System.Windows.Forms.ProgressBar pgbImportCustomer;
         private System.Windows.Forms.TextBox txtPathJsonKH;
         private System.Windows.Forms.Button btnImportCustomer;
+        private System.Windows.Forms.Button btnExportBill;
+        private System.Windows.Forms.Button btnExportBillDetail;
     }
 }

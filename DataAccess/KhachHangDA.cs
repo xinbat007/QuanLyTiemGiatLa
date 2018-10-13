@@ -346,9 +346,9 @@ namespace DataAccess
                    ,[DiaChi]
                    ,[DienThoai])
              VALUES
-                   ('" + khachhang.TenKhachHang + @"'
-                   ," + (string.IsNullOrEmpty(khachhang.DiaChi) ? "null" : "'" + khachhang.DiaChi + "'") + @"
-                   ,'" + khachhang.DienThoai + @"');
+                   (N'" + khachhang.TenKhachHang + @"'
+                   ," + (string.IsNullOrEmpty(khachhang.DiaChi) ? "null" : "N'" + khachhang.DiaChi + "'") + @"
+                   ,N'" + khachhang.DienThoai + @"');
         SELECT SCOPE_IDENTITY();
     END
 ";
