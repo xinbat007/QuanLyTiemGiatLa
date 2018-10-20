@@ -15,7 +15,7 @@ namespace QuanLyTiemGiatLa
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            //BienChung.isTrienKhai = false;
+            BienChung.isTrienKhai = false;
             if (true == BienChung.isTrienKhai)
             {
                 if (!KiemTraBanQuyen()) return;

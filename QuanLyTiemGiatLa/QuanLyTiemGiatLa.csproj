@@ -500,6 +500,7 @@
     </Compile>
     <Compile Include="Xuly\BienChung.cs" />
     <Compile Include="Xuly\DangKySuDungPhanMem.cs" />
+    <Compile Include="Xuly\Http.cs" />
     <Compile Include="Xuly\Ini.cs" />
     <Compile Include="UserCtrl\ToolStripStatusKeyState.cs">
       <SubType>Component</SubType>

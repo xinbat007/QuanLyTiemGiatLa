@@ -157,46 +157,6 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             try
             {
-                string s = "";
-                // Create the web request  
-                HttpWebRequest request = WebRequest.Create("http://139.180.211.168/api/v1.0/auth/login") as HttpWebRequest;
-                //request.Accept = "application/atom+xml";
-                var postData = "username=admin";
-                postData += "&" + "password=Taolaadmin";
-                var dataEncode = Encoding.ASCII.GetBytes(postData);
-
-                request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.ContentLength = dataEncode.Length;
-                request.Credentials = CredentialCache.DefaultCredentials;
-                using (Stream dataStream = request.GetRequestStream())
-                {
-                    dataStream.Write(dataEncode, 0, dataEncode.Length);
-                    dataStream.Close();
-                }
-
-
-                // Get response
-                using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
-                {
-                    // Get the response stream  
-                    StreamReader reader = new StreamReader(response.GetResponseStream());
-                    string json = reader.ReadToEnd();
-                    s += json + "\nStatus: " + ((HttpWebResponse)response).StatusDescription;
-                    reader.Close();
-                    response.Close();
-
-                    //{
-                    //    "code": 400,
-                    //    "message": "User post method with {clientId, password}",
-                    //    "data": null
-                    //}
-                    Dictionary<string, object> htmlAttributes = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-                    string code = htmlAttributes["codee"] == null ? "" : htmlAttributes["code"].ToString();
-                    string message = htmlAttributes["message"].ToString();
-                    string data = htmlAttributes["data"].ToString();
-                    MessageBox.Show(s + "\n\n" + code + message + data, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-                }
             }
             catch (System.Exception ex)
             {
