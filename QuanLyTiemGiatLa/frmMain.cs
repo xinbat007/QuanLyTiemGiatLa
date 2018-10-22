@@ -150,8 +150,6 @@ namespace QuanLyTiemGiatLa
 
         private void btnCauHinhGiaDeDo_Click(object sender, EventArgs ev)
         {
-            MessageBox.Show("Result: " + Xuly.Http.Login("machine_master", "taolaadmin"), "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            return;
             if (_frmDSGiaDeDo == null || _frmDSGiaDeDo.IsDisposed)
             {
                 _frmDSGiaDeDo = new frmDSGiaDeDo();
@@ -162,8 +160,6 @@ namespace QuanLyTiemGiatLa
 
         private void btnLapPhieu_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Result: " + Xuly.Http.SyncOrder(null), "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            return;
             if (_frmLapPhieu == null || _frmLapPhieu.IsDisposed)
             {
                 _frmLapPhieu = new frmLapPhieu();

@@ -43,18 +43,25 @@
             this.btnThoat = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnSyncCustomer = new System.Windows.Forms.Button();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.txtPasswordServerSync = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtUserNameServerSync = new System.Windows.Forms.TextBox();
             this.txtPathServer = new System.Windows.Forms.TextBox();
-            this.btnSync = new System.Windows.Forms.Button();
+            this.btnSyncOrder = new System.Windows.Forms.Button();
             this.btnTryConnect = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.btnExportCustomer = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.btnExportBillDetail = new System.Windows.Forms.Button();
             this.btnBrowsePathCustomer = new System.Windows.Forms.Button();
-            this.pgbImportCustomer = new System.Windows.Forms.ProgressBar();
+            this.btnExportBill = new System.Windows.Forms.Button();
+            this.pgbProgress = new System.Windows.Forms.ProgressBar();
             this.txtPathJsonKH = new System.Windows.Forms.TextBox();
             this.btnImportCustomer = new System.Windows.Forms.Button();
-            this.btnExportBill = new System.Windows.Forms.Button();
-            this.btnExportBillDetail = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -152,7 +159,7 @@
             // btnLuuCauHinh
             // 
             this.btnLuuCauHinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLuuCauHinh.Location = new System.Drawing.Point(627, 260);
+            this.btnLuuCauHinh.Location = new System.Drawing.Point(652, 409);
             this.btnLuuCauHinh.Name = "btnLuuCauHinh";
             this.btnLuuCauHinh.Size = new System.Drawing.Size(108, 47);
             this.btnLuuCauHinh.TabIndex = 20;
@@ -166,7 +173,7 @@
             this.btnThoat.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnThoat.Image = global::QuanLyTiemGiatLa.Properties.Resources.Exit16;
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(741, 260);
+            this.btnThoat.Location = new System.Drawing.Point(766, 409);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(89, 47);
             this.btnThoat.TabIndex = 21;
@@ -194,15 +201,83 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnSyncCustomer);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.txtPasswordServerSync);
+            this.groupBox2.Controls.Add(this.label7);
+            this.groupBox2.Controls.Add(this.label6);
+            this.groupBox2.Controls.Add(this.txtUserNameServerSync);
             this.groupBox2.Controls.Add(this.txtPathServer);
-            this.groupBox2.Controls.Add(this.btnSync);
+            this.groupBox2.Controls.Add(this.btnSyncOrder);
             this.groupBox2.Controls.Add(this.btnTryConnect);
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Location = new System.Drawing.Point(415, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(432, 155);
+            this.groupBox2.Size = new System.Drawing.Size(432, 357);
             this.groupBox2.TabIndex = 24;
             this.groupBox2.TabStop = false;
+            // 
+            // btnSyncCustomer
+            // 
+            this.btnSyncCustomer.Location = new System.Drawing.Point(201, 261);
+            this.btnSyncCustomer.Name = "btnSyncCustomer";
+            this.btnSyncCustomer.Size = new System.Drawing.Size(170, 47);
+            this.btnSyncCustomer.TabIndex = 11;
+            this.btnSyncCustomer.Text = "Đồng bộ khách hàng";
+            this.btnSyncCustomer.UseVisualStyleBackColor = true;
+            this.btnSyncCustomer.Click += new System.EventHandler(this.btnSyncCustomer_Click);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(12, 214);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(275, 20);
+            this.label9.TabIndex = 10;
+            this.label9.Text = "Bạn có ...... khách hàng chưa đồng bộ";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(12, 176);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(231, 20);
+            this.label8.TabIndex = 9;
+            this.label8.Text = "Bạn có ...... phiếu chưa đồng bộ";
+            // 
+            // txtPasswordServerSync
+            // 
+            this.txtPasswordServerSync.Location = new System.Drawing.Point(105, 126);
+            this.txtPasswordServerSync.Name = "txtPasswordServerSync";
+            this.txtPasswordServerSync.PasswordChar = '*';
+            this.txtPasswordServerSync.Size = new System.Drawing.Size(191, 26);
+            this.txtPasswordServerSync.TabIndex = 8;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(12, 129);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(82, 20);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "Password:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 90);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(87, 20);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Username:";
+            // 
+            // txtUserNameServerSync
+            // 
+            this.txtUserNameServerSync.Location = new System.Drawing.Point(105, 87);
+            this.txtUserNameServerSync.Name = "txtUserNameServerSync";
+            this.txtUserNameServerSync.Size = new System.Drawing.Size(191, 26);
+            this.txtUserNameServerSync.TabIndex = 5;
             // 
             // txtPathServer
             // 
@@ -211,19 +286,19 @@
             this.txtPathServer.Size = new System.Drawing.Size(405, 26);
             this.txtPathServer.TabIndex = 4;
             // 
-            // btnSync
+            // btnSyncOrder
             // 
-            this.btnSync.Location = new System.Drawing.Point(271, 87);
-            this.btnSync.Name = "btnSync";
-            this.btnSync.Size = new System.Drawing.Size(144, 47);
-            this.btnSync.TabIndex = 2;
-            this.btnSync.Text = "Đồng bộ lên tổng";
-            this.btnSync.UseVisualStyleBackColor = true;
-            this.btnSync.Click += new System.EventHandler(this.btnSync_Click);
+            this.btnSyncOrder.Location = new System.Drawing.Point(16, 261);
+            this.btnSyncOrder.Name = "btnSyncOrder";
+            this.btnSyncOrder.Size = new System.Drawing.Size(144, 47);
+            this.btnSyncOrder.TabIndex = 2;
+            this.btnSyncOrder.Text = "Đồng bộ phiếu";
+            this.btnSyncOrder.UseVisualStyleBackColor = true;
+            this.btnSyncOrder.Click += new System.EventHandler(this.btnSyncOrder_Click);
             // 
             // btnTryConnect
             // 
-            this.btnTryConnect.Location = new System.Drawing.Point(152, 87);
+            this.btnTryConnect.Location = new System.Drawing.Point(302, 105);
             this.btnTryConnect.Name = "btnTryConnect";
             this.btnTryConnect.Size = new System.Drawing.Size(113, 47);
             this.btnTryConnect.TabIndex = 1;
@@ -242,7 +317,7 @@
             // 
             // btnExportCustomer
             // 
-            this.btnExportCustomer.Location = new System.Drawing.Point(318, 69);
+            this.btnExportCustomer.Location = new System.Drawing.Point(229, 69);
             this.btnExportCustomer.Name = "btnExportCustomer";
             this.btnExportCustomer.Size = new System.Drawing.Size(157, 26);
             this.btnExportCustomer.TabIndex = 25;
@@ -252,66 +327,21 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.btnExportBillDetail);
             this.groupBox3.Controls.Add(this.btnBrowsePathCustomer);
-            this.groupBox3.Controls.Add(this.pgbImportCustomer);
+            this.groupBox3.Controls.Add(this.btnExportBill);
             this.groupBox3.Controls.Add(this.txtPathJsonKH);
             this.groupBox3.Controls.Add(this.btnExportCustomer);
             this.groupBox3.Controls.Add(this.btnImportCustomer);
             this.groupBox3.Location = new System.Drawing.Point(12, 214);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(481, 105);
+            this.groupBox3.Size = new System.Drawing.Size(397, 155);
             this.groupBox3.TabIndex = 26;
             this.groupBox3.TabStop = false;
             // 
-            // btnBrowsePathCustomer
-            // 
-            this.btnBrowsePathCustomer.Location = new System.Drawing.Point(283, 25);
-            this.btnBrowsePathCustomer.Name = "btnBrowsePathCustomer";
-            this.btnBrowsePathCustomer.Size = new System.Drawing.Size(29, 26);
-            this.btnBrowsePathCustomer.TabIndex = 20;
-            this.btnBrowsePathCustomer.Text = "...";
-            this.btnBrowsePathCustomer.UseVisualStyleBackColor = true;
-            this.btnBrowsePathCustomer.Click += new System.EventHandler(this.btnBrowsePathCustomer_Click);
-            // 
-            // pgbImportCustomer
-            // 
-            this.pgbImportCustomer.Location = new System.Drawing.Point(10, 69);
-            this.pgbImportCustomer.Name = "pgbImportCustomer";
-            this.pgbImportCustomer.Size = new System.Drawing.Size(302, 23);
-            this.pgbImportCustomer.TabIndex = 28;
-            this.pgbImportCustomer.Visible = false;
-            // 
-            // txtPathJsonKH
-            // 
-            this.txtPathJsonKH.Location = new System.Drawing.Point(10, 25);
-            this.txtPathJsonKH.Name = "txtPathJsonKH";
-            this.txtPathJsonKH.ReadOnly = true;
-            this.txtPathJsonKH.Size = new System.Drawing.Size(267, 26);
-            this.txtPathJsonKH.TabIndex = 27;
-            // 
-            // btnImportCustomer
-            // 
-            this.btnImportCustomer.Location = new System.Drawing.Point(318, 25);
-            this.btnImportCustomer.Name = "btnImportCustomer";
-            this.btnImportCustomer.Size = new System.Drawing.Size(157, 26);
-            this.btnImportCustomer.TabIndex = 26;
-            this.btnImportCustomer.Text = "Nhập dữ liệu KH";
-            this.btnImportCustomer.UseVisualStyleBackColor = true;
-            this.btnImportCustomer.Click += new System.EventHandler(this.btnImportCustomer_Click);
-            // 
-            // btnExportBill
-            // 
-            this.btnExportBill.Location = new System.Drawing.Point(524, 175);
-            this.btnExportBill.Name = "btnExportBill";
-            this.btnExportBill.Size = new System.Drawing.Size(150, 33);
-            this.btnExportBill.TabIndex = 27;
-            this.btnExportBill.Text = "Xuất phiếu";
-            this.btnExportBill.UseVisualStyleBackColor = true;
-            this.btnExportBill.Click += new System.EventHandler(this.btnExportBill_Click);
-            // 
             // btnExportBillDetail
             // 
-            this.btnExportBillDetail.Location = new System.Drawing.Point(680, 175);
+            this.btnExportBillDetail.Location = new System.Drawing.Point(163, 110);
             this.btnExportBillDetail.Name = "btnExportBillDetail";
             this.btnExportBillDetail.Size = new System.Drawing.Size(150, 33);
             this.btnExportBillDetail.TabIndex = 28;
@@ -319,16 +349,61 @@
             this.btnExportBillDetail.UseVisualStyleBackColor = true;
             this.btnExportBillDetail.Click += new System.EventHandler(this.btnExportBillDetail_Click);
             // 
+            // btnBrowsePathCustomer
+            // 
+            this.btnBrowsePathCustomer.Location = new System.Drawing.Point(194, 25);
+            this.btnBrowsePathCustomer.Name = "btnBrowsePathCustomer";
+            this.btnBrowsePathCustomer.Size = new System.Drawing.Size(29, 26);
+            this.btnBrowsePathCustomer.TabIndex = 20;
+            this.btnBrowsePathCustomer.Text = "...";
+            this.btnBrowsePathCustomer.UseVisualStyleBackColor = true;
+            this.btnBrowsePathCustomer.Click += new System.EventHandler(this.btnBrowsePathCustomer_Click);
+            // 
+            // btnExportBill
+            // 
+            this.btnExportBill.Location = new System.Drawing.Point(10, 110);
+            this.btnExportBill.Name = "btnExportBill";
+            this.btnExportBill.Size = new System.Drawing.Size(150, 33);
+            this.btnExportBill.TabIndex = 27;
+            this.btnExportBill.Text = "Xuất phiếu";
+            this.btnExportBill.UseVisualStyleBackColor = true;
+            this.btnExportBill.Click += new System.EventHandler(this.btnExportBill_Click);
+            // 
+            // pgbProgress
+            // 
+            this.pgbProgress.Location = new System.Drawing.Point(206, 433);
+            this.pgbProgress.Name = "pgbProgress";
+            this.pgbProgress.Size = new System.Drawing.Size(281, 23);
+            this.pgbProgress.TabIndex = 28;
+            this.pgbProgress.Visible = false;
+            // 
+            // txtPathJsonKH
+            // 
+            this.txtPathJsonKH.Location = new System.Drawing.Point(10, 25);
+            this.txtPathJsonKH.Name = "txtPathJsonKH";
+            this.txtPathJsonKH.ReadOnly = true;
+            this.txtPathJsonKH.Size = new System.Drawing.Size(178, 26);
+            this.txtPathJsonKH.TabIndex = 27;
+            // 
+            // btnImportCustomer
+            // 
+            this.btnImportCustomer.Location = new System.Drawing.Point(229, 25);
+            this.btnImportCustomer.Name = "btnImportCustomer";
+            this.btnImportCustomer.Size = new System.Drawing.Size(157, 26);
+            this.btnImportCustomer.TabIndex = 26;
+            this.btnImportCustomer.Text = "Nhập dữ liệu KH";
+            this.btnImportCustomer.UseVisualStyleBackColor = true;
+            this.btnImportCustomer.Click += new System.EventHandler(this.btnImportCustomer_Click);
+            // 
             // frmBackUpDuLieu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(859, 325);
-            this.Controls.Add(this.btnExportBillDetail);
-            this.Controls.Add(this.btnExportBill);
+            this.ClientSize = new System.Drawing.Size(884, 474);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.btnThoat);
+            this.Controls.Add(this.pgbProgress);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnLuuCauHinh);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -365,16 +440,23 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox txtPathServer;
-        private System.Windows.Forms.Button btnSync;
+        private System.Windows.Forms.Button btnSyncOrder;
         private System.Windows.Forms.Button btnTryConnect;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button btnExportCustomer;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Button btnBrowsePathCustomer;
-        private System.Windows.Forms.ProgressBar pgbImportCustomer;
+        private System.Windows.Forms.ProgressBar pgbProgress;
         private System.Windows.Forms.TextBox txtPathJsonKH;
         private System.Windows.Forms.Button btnImportCustomer;
         private System.Windows.Forms.Button btnExportBill;
         private System.Windows.Forms.Button btnExportBillDetail;
+        private System.Windows.Forms.Button btnSyncCustomer;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.TextBox txtPasswordServerSync;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtUserNameServerSync;
     }
 }

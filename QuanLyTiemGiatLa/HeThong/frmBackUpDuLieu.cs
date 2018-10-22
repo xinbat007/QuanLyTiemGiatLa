@@ -2,7 +2,6 @@
 using System.Net;
 using System.Text;
 using System.IO;
-//using System.Web.Script.Serialization;
 using QuanLyTiemGiatLa.Xuly;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -31,6 +30,10 @@ namespace QuanLyTiemGiatLa.HeThong
                     iniBackup.ThoiGianTuDongBackUp = 19;
                 txtThoiGianBackup.Text = iniBackup.ThoiGianTuDongBackUp.ToString();
                 txtPathServer.Text = Properties.Settings.Default.PathServerSync;
+                txtUserNameServerSync.Text = Properties.Settings.Default.UserNameServerSync;
+                txtPasswordServerSync.Text = Properties.Settings.Default.PasswordServerSync;
+                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
+                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
             }
             catch (System.Exception ex)
             {
@@ -112,6 +115,8 @@ namespace QuanLyTiemGiatLa.HeThong
             try
             {
                 Properties.Settings.Default.PathServerSync = txtPathServer.Text;
+                Properties.Settings.Default.UserNameServerSync = txtUserNameServerSync.Text;
+                Properties.Settings.Default.PasswordServerSync = txtPasswordServerSync.Text;
                 Properties.Settings.Default.Save();
             }
             catch (System.Exception ex)
@@ -146,29 +151,6 @@ namespace QuanLyTiemGiatLa.HeThong
                 }
                 ThaoTacIniBackup thaotacini = new ThaoTacIniBackup();
                 thaotacini.Write(txtDuongDanFile.Text, txtCopyTo.Text, int.Parse(txtThoiGianBackup.Text));
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnTryConnect_Click(object sender, System.EventArgs e)
-        {
-            try
-            {
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnSync_Click(object sender, System.EventArgs e)
-        {
-            try
-            {
-
             }
             catch (System.Exception ex)
             {
@@ -224,14 +206,14 @@ namespace QuanLyTiemGiatLa.HeThong
                 Entity.ListKhachHangEntity lst = new Entity.ListKhachHangEntity();
                 if (this.checkFileJson(ref lst))
                 {
-                    pgbImportCustomer.Minimum = 0;
-                    pgbImportCustomer.Maximum = lst.Count;
-                    pgbImportCustomer.Visible = true;
+                    pgbProgress.Minimum = 0;
+                    pgbProgress.Maximum = lst.Count;
+                    pgbProgress.Visible = true;
                     int countSuccess = 0;
-                    StreamWriter sw = new StreamWriter(".\\log_ImportCustomers.txt");
+                    StreamWriter sw = new StreamWriter(".\\log.txt");
                     for (int i = 0; i < lst.Count; ++i)
                     {
-                        pgbImportCustomer.Value = i;
+                        pgbProgress.Value = i;
                         Entity.KhachHangEntity kh = lst[i];
                         if (string.IsNullOrEmpty(kh.DienThoai))
                         {
@@ -260,7 +242,7 @@ namespace QuanLyTiemGiatLa.HeThong
             }
             finally
             {
-                pgbImportCustomer.Visible = false;
+                pgbProgress.Visible = false;
                 btnImportCustomer.Enabled = true;
             }
         }
@@ -348,6 +330,115 @@ namespace QuanLyTiemGiatLa.HeThong
             finally
             {
                 btnExportBillDetail.Enabled = true;
+            }
+        }
+
+        private void btnTryConnect_Click(object sender, System.EventArgs e)
+        {
+            try
+            {
+                ResultHttp result = Http.Login(txtPathServer.Text, txtUserNameServerSync.Text, txtPasswordServerSync.Text);
+                MessageBox.Show(result.Message, "Thông báo", MessageBoxButtons.OK,
+                    result.Code != "200" ? MessageBoxIcon.Error : MessageBoxIcon.Asterisk);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
+                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
+            }
+        }
+
+        private void btnSyncOrder_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                btnSyncOrder.Enabled = false;
+                btnSyncCustomer.Enabled = false;
+                ListPhieuEntity listPhieu = Business.PhieuBO.SelectByTuPhieuDenPhieu(0, 10);
+                pgbProgress.Minimum = 0;
+                pgbProgress.Maximum = listPhieu.Count;
+                pgbProgress.Value = 0;
+                pgbProgress.Visible = true;
+                int countSuccess = 0;
+                StreamWriter sw = new StreamWriter(".\\log.txt");
+                for (int i = 0; i < listPhieu.Count; i++)
+                {
+                    pgbProgress.Value = i;
+                    ResultHttp result = Xuly.Http.SyncOrder(txtPathServer.Text, listPhieu[i]);
+                    if (result.Code == "200")
+                    {
+                        sw.WriteLine("Thành công phiếu '" + listPhieu[i].MaPhieu + "': " + result.Message);
+                        countSuccess++;
+                    }
+                    else
+                    {
+                        sw.WriteLine("Lỗi phiếu '" + listPhieu[i].MaPhieu + "': " + result.Message);
+                        break;
+                    }
+                }
+                sw.Close();
+                MessageBox.Show("Thành công: " + countSuccess + "/" + listPhieu.Count + " phiếu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
+                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
+                pgbProgress.Visible = false;
+            }
+        }
+
+        private void btnSyncCustomer_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                btnSyncOrder.Enabled = false;
+                btnSyncCustomer.Enabled = false;
+                var khachhang = new Entity.KhachHangEntity();
+                Entity.ListKhachHangEntity lstCustomers = Business.KhachHangBO.Search(khachhang);
+                pgbProgress.Minimum = 0;
+                pgbProgress.Maximum = lstCustomers.Count;
+                pgbProgress.Value = 0;
+                pgbProgress.Visible = true;
+                int countSuccess = 0;
+                StreamWriter sw = new StreamWriter(".\\log.txt");
+                for (int i = 0; i < lstCustomers.Count; i++)
+                {
+                    pgbProgress.Value = i;
+                    ResultHttp result = Xuly.Http.SyncCustomer(txtPathServer.Text, lstCustomers[i]);
+                    if (result.Code == "200")
+                    {
+                        sw.WriteLine("Thành công khách hàng '" + lstCustomers[i].TenKhachHang + "', '" + lstCustomers[i].DienThoai + "': " + result.Message);
+                        countSuccess++;
+                    }
+                    else
+                    {
+                        sw.WriteLine("Lỗi khách hàng '" +
+                            lstCustomers[i].MaKhachHang + "', '" +
+                            lstCustomers[i].TenKhachHang + "', '" +
+                            lstCustomers[i].DienThoai + "': " + result.Message);
+                        break;
+                    }
+                }
+                sw.Close();
+                MessageBox.Show("Thành công: " + countSuccess + "/" + lstCustomers.Count + " khách hàng", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
+                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
+                pgbProgress.Visible = false;
             }
         }
     }

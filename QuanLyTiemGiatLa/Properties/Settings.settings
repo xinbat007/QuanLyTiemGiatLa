@@ -24,7 +24,13 @@
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="PathServerSync" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">http://139.180.211.168/api/v1.0</Value>
+    </Setting>
+    <Setting Name="UserNameServerSync" Type="System.String" Scope="User">
+      <Value Profile="(Default)">machine_master</Value>
+    </Setting>
+    <Setting Name="PasswordServerSync" Type="System.String" Scope="User">
+      <Value Profile="(Default)">taolaadmin</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -109,13 +109,37 @@ namespace QuanLyTiemGiatLa.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://139.180.211.168/api/v1.0")]
         public string PathServerSync {
             get {
                 return ((string)(this["PathServerSync"]));
             }
             set {
                 this["PathServerSync"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("machine_master")]
+        public string UserNameServerSync {
+            get {
+                return ((string)(this["UserNameServerSync"]));
+            }
+            set {
+                this["UserNameServerSync"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("taolaadmin")]
+        public string PasswordServerSync {
+            get {
+                return ((string)(this["PasswordServerSync"]));
+            }
+            set {
+                this["PasswordServerSync"] = value;
             }
         }
     }
