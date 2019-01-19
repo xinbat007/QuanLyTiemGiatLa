@@ -181,18 +181,19 @@ namespace QuanLyTiemGiatLa.Xuly
             {
                 string url = baseUrl + "/customer";
                 WebRequest request = WebRequest.Create(url);
-                var postData = "MaKhachHang=" + customer.MaKhachHang +
-                    "&" + "TenKhachHang=" + customer.TenKhachHang +
-                    "&" + "DiaChi=" + customer.DiaChi +
-                    "&" + "DienThoai=" + customer.DienThoai +
-                    "&" + "MaVip=" + customer.MaVip +
-                    "&" + "TenVip=" + customer.TenVip +
-                    "&" + "GiamGia=" + customer.GiamGia +
-                    "&" + "DaTungThanhToan=" + customer.DaTungThanhToan +
-                    "&" + "SoTheVip=" + customer.SoTheVip;
-                var dataEncode = Encoding.ASCII.GetBytes(postData);
+                //var postData = "MaKhachHang=" + customer.MaKhachHang +
+                //    "&" + "TenKhachHang=" + customer.TenKhachHang +
+                //    "&" + "DiaChi=" + customer.DiaChi +
+                //    "&" + "DienThoai=" + customer.DienThoai +
+                //    "&" + "MaVip=" + customer.MaVip +
+                //    "&" + "TenVip=" + customer.TenVip +
+                //    "&" + "GiamGia=" + customer.GiamGia +
+                //    "&" + "DaTungThanhToan=" + customer.DaTungThanhToan +
+                //    "&" + "SoTheVip=" + customer.SoTheVip;
+                var postDataJson = JsonConvert.SerializeObject(customer, Formatting.Indented);
+                var dataEncode = Encoding.UTF8.GetBytes(postDataJson);
                 request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentType = "application/json";
                 request.ContentLength = dataEncode.Length;
                 request.UseDefaultCredentials = true;
                 request.PreAuthenticate = true;

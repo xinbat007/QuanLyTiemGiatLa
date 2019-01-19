@@ -403,13 +403,15 @@ namespace QuanLyTiemGiatLa.HeThong
                 btnSyncCustomer.Enabled = false;
                 var khachhang = new Entity.KhachHangEntity();
                 Entity.ListKhachHangEntity lstCustomers = Business.KhachHangBO.Search(khachhang);
+                // thien test
+                int maxCustomerSync = lstCustomers.Count;// < 10 ? lstCustomers.Count : 10;
                 pgbProgress.Minimum = 0;
-                pgbProgress.Maximum = lstCustomers.Count;
+                pgbProgress.Maximum = maxCustomerSync;
                 pgbProgress.Value = 0;
                 pgbProgress.Visible = true;
                 int countSuccess = 0;
-                StreamWriter sw = new StreamWriter(".\\log.txt");
-                for (int i = 0; i < lstCustomers.Count; i++)
+                StreamWriter sw = new StreamWriter(".\\log.txt");                
+                for (int i = 0; i < maxCustomerSync; i++)
                 {
                     pgbProgress.Value = i;
                     ResultHttp result = Xuly.Http.SyncCustomer(txtPathServer.Text, lstCustomers[i]);
@@ -428,7 +430,7 @@ namespace QuanLyTiemGiatLa.HeThong
                     }
                 }
                 sw.Close();
-                MessageBox.Show("Thành công: " + countSuccess + "/" + lstCustomers.Count + " khách hàng", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Thành công: " + countSuccess + "/" + lstCustomers.Count + " khách hàng.\nChi tiết xem ở file 'log.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             catch (System.Exception ex)
             {

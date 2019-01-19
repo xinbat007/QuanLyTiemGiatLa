@@ -12,7 +12,7 @@ namespace QuanLyTiemGiatLa.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -109,7 +109,7 @@ namespace QuanLyTiemGiatLa.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://139.180.211.168/api/v1.0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://45.77.243.216/api/v1.0")]
         public string PathServerSync {
             get {
                 return ((string)(this["PathServerSync"]));
@@ -121,7 +121,7 @@ namespace QuanLyTiemGiatLa.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("machine_master")]
+        [global::System.Configuration.DefaultSettingValueAttribute("may_2")]
         public string UserNameServerSync {
             get {
                 return ((string)(this["UserNameServerSync"]));
@@ -133,7 +133,7 @@ namespace QuanLyTiemGiatLa.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("taolaadmin")]
+        [global::System.Configuration.DefaultSettingValueAttribute("validPassword")]
         public string PasswordServerSync {
             get {
                 return ((string)(this["PasswordServerSync"]));

@@ -1,0 +1,10 @@
+Thành công khách hàng 'NGUYỄN NGỌC TRÂM', '0912986988': Customer data Posted succesful
+Thành công khách hàng 'NGUYỄN THANH NHÀN', '01698082272': Customer data Posted succesful
+Thành công khách hàng 'CHỊ THỦY', '0978885670': Customer data Posted succesful
+Thành công khách hàng 'CÔ NGA', '0912474520': Customer data Posted succesful
+Thành công khách hàng 'CHỊ AN', '0908087979': Customer data Posted succesful
+Thành công khách hàng 'NGUYỄN TIẾN MINH', '0903445560': Customer data Posted succesful
+Thành công khách hàng '', '': Customer data Posted succesful
+Thành công khách hàng 'ANH NGỌC ANH', '39722906': Customer data Posted succesful
+Thành công khách hàng 'ANH DUY', '01664241261': Customer data Posted succesful
+Thành công khách hàng 'ANH TUẤN', '01664073979': Customer data Posted succesful
