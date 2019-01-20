@@ -7,6 +7,8 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System;
 using Entity;
+using System.ComponentModel;
+using System.Threading;
 
 namespace QuanLyTiemGiatLa.HeThong
 {
@@ -15,7 +17,10 @@ namespace QuanLyTiemGiatLa.HeThong
         public frmBackUpDuLieu()
         {
             InitializeComponent();
+            lblMessage.Text = "";
             this.Load += new System.EventHandler(frmBackUpDuLieu_Load);
+            bgwSyncOrders.ProgressChanged += bgwSyncOrders_ProgressChanged;
+            bgwSyncOrders.RunWorkerCompleted += bgwSyncOrders_RunWorkerCompleted;
         }
 
         private void frmBackUpDuLieu_Load(object sender, System.EventArgs e)
@@ -32,8 +37,8 @@ namespace QuanLyTiemGiatLa.HeThong
                 txtPathServer.Text = Properties.Settings.Default.PathServerSync;
                 txtUserNameServerSync.Text = Properties.Settings.Default.UserNameServerSync;
                 txtPasswordServerSync.Text = Properties.Settings.Default.PasswordServerSync;
-                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
-                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
+                btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
+                btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
             }
             catch (System.Exception ex)
             {
@@ -210,7 +215,7 @@ namespace QuanLyTiemGiatLa.HeThong
                     pgbProgress.Maximum = lst.Count;
                     pgbProgress.Visible = true;
                     int countSuccess = 0;
-                    StreamWriter sw = new StreamWriter(".\\log.txt");
+                    StreamWriter sw = new StreamWriter(".\\log_ImportCustomers.txt");
                     for (int i = 0; i < lst.Count; ++i)
                     {
                         pgbProgress.Value = i;
@@ -337,8 +342,8 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             try
             {
-                ResultHttp result = Http.Login(txtPathServer.Text, txtUserNameServerSync.Text, txtPasswordServerSync.Text);
-                MessageBox.Show(result.Message, "Thông báo", MessageBoxButtons.OK,
+                ResultHttp result = HttpUtil.Login(txtPathServer.Text, txtUserNameServerSync.Text, txtPasswordServerSync.Text);
+                MessageBox.Show("Kết nối " + result.Message + "!", "Thông báo", MessageBoxButtons.OK,
                     result.Code != "200" ? MessageBoxIcon.Error : MessageBoxIcon.Asterisk);
             }
             catch (System.Exception ex)
@@ -347,51 +352,31 @@ namespace QuanLyTiemGiatLa.HeThong
             }
             finally
             {
-                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
-                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
+                btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
+                btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
             }
         }
 
         private void btnSyncOrder_Click(object sender, EventArgs e)
         {
-            try
+            if (bgwSyncOrders.IsBusy)
             {
-                btnSyncOrder.Enabled = false;
+                bgwSyncOrders.CancelAsync();
+            }
+            else
+            {
+                btnSyncOrder.Text = "Dừng";
                 btnSyncCustomer.Enabled = false;
-                ListPhieuEntity listPhieu = Business.PhieuBO.SelectByTuPhieuDenPhieu(0, 10);
+                // thien test
+                listPhieuSync = Business.PhieuBO.SelectNangCao(true, false, 0, "", "", false, DateTime.Now, DateTime.Now);
+                //listPhieuSync = Business.PhieuBO.SelectByTuPhieuDenPhieu(85, 200);
+                countPhieuSync = isTest ? 50 : listPhieuSync.Count;
+                //================
                 pgbProgress.Minimum = 0;
-                pgbProgress.Maximum = listPhieu.Count;
+                pgbProgress.Maximum = countPhieuSync;
                 pgbProgress.Value = 0;
                 pgbProgress.Visible = true;
-                int countSuccess = 0;
-                StreamWriter sw = new StreamWriter(".\\log.txt");
-                for (int i = 0; i < listPhieu.Count; i++)
-                {
-                    pgbProgress.Value = i;
-                    ResultHttp result = Xuly.Http.SyncOrder(txtPathServer.Text, listPhieu[i]);
-                    if (result.Code == "200")
-                    {
-                        sw.WriteLine("Thành công phiếu '" + listPhieu[i].MaPhieu + "': " + result.Message);
-                        countSuccess++;
-                    }
-                    else
-                    {
-                        sw.WriteLine("Lỗi phiếu '" + listPhieu[i].MaPhieu + "': " + result.Message);
-                        break;
-                    }
-                }
-                sw.Close();
-                MessageBox.Show("Thành công: " + countSuccess + "/" + listPhieu.Count + " phiếu", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
-            }
-            catch (System.Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
-                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
-                pgbProgress.Visible = false;
+                bgwSyncOrders.RunWorkerAsync();
             }
         }
 
@@ -402,7 +387,7 @@ namespace QuanLyTiemGiatLa.HeThong
                 btnSyncOrder.Enabled = false;
                 btnSyncCustomer.Enabled = false;
                 var khachhang = new Entity.KhachHangEntity();
-                Entity.ListKhachHangEntity lstCustomers = Business.KhachHangBO.Search(khachhang);
+                ListKhachHangEntity lstCustomers = Business.KhachHangBO.Search(khachhang);
                 // thien test
                 int maxCustomerSync = lstCustomers.Count;// < 10 ? lstCustomers.Count : 10;
                 pgbProgress.Minimum = 0;
@@ -410,11 +395,11 @@ namespace QuanLyTiemGiatLa.HeThong
                 pgbProgress.Value = 0;
                 pgbProgress.Visible = true;
                 int countSuccess = 0;
-                StreamWriter sw = new StreamWriter(".\\log.txt");                
+                StreamWriter sw = new StreamWriter(".\\log_SyncCustomers.txt");                
                 for (int i = 0; i < maxCustomerSync; i++)
                 {
                     pgbProgress.Value = i;
-                    ResultHttp result = Xuly.Http.SyncCustomer(txtPathServer.Text, lstCustomers[i]);
+                    ResultHttp result = Xuly.HttpUtil.SyncCustomer(txtPathServer.Text, lstCustomers[i]);
                     if (result.Code == "200")
                     {
                         sw.WriteLine("Thành công khách hàng '" + lstCustomers[i].TenKhachHang + "', '" + lstCustomers[i].DienThoai + "': " + result.Message);
@@ -430,7 +415,7 @@ namespace QuanLyTiemGiatLa.HeThong
                     }
                 }
                 sw.Close();
-                MessageBox.Show("Thành công: " + countSuccess + "/" + lstCustomers.Count + " khách hàng.\nChi tiết xem ở file 'log.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Thành công: " + countSuccess + "/" + maxCustomerSync + " khách hàng.\nChi tiết xem ở file 'log_SyncCustomers.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             catch (System.Exception ex)
             {
@@ -438,9 +423,104 @@ namespace QuanLyTiemGiatLa.HeThong
             }
             finally
             {
-                btnSyncOrder.Enabled = Xuly.Http.Token() != "";
-                btnSyncCustomer.Enabled = Xuly.Http.Token() != "";
+                btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
+                btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
                 pgbProgress.Visible = false;
+            }
+        }
+
+        private bool isTest = false;
+        private ListPhieuEntity listPhieuSync = null;
+        private int countPhieuSync = 0;
+        private int countSuccess = 0;
+
+        private void SyncPhieu(PhieuEntity phieu, StreamWriter sw)
+        {
+            ListChiTietPhieuEntity lstCTPhieu = Business.ChiTietPhieuBO.SelectByMaPhieu(phieu.MaPhieu);
+            ListChiTietPhieuSyncEntity lstCTPhieuSync = new ListChiTietPhieuSyncEntity();
+            for (int k = 0; k < lstCTPhieu.Count; k++)
+            {
+                ChiTietPhieuEntity ctPhieu = lstCTPhieu[k];
+                ChiTietPhieuSyncEntity ctPhieuSync = new ChiTietPhieuSyncEntity();
+                ctPhieuSync.CopyFromPhieu(phieu);
+                ctPhieuSync.CopyFromCTPhieu(ctPhieu);
+                lstCTPhieuSync.Add(ctPhieuSync);
+            }
+            ResultHttp result = Xuly.HttpUtil.SyncOrder(txtPathServer.Text, lstCTPhieuSync);
+            if (result.Code == "200")
+            {
+                sw.WriteLine("Thành công phiếu '" + phieu.MaPhieu + "': " + result.Message);
+                countSuccess++;
+            }
+            else
+            {
+                sw.WriteLine("Lỗi phiếu '" + phieu.MaPhieu + "': " + result.Message);
+            }
+        }
+
+        private void bgwSyncOrders_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
+        {
+            try
+            {
+                countSuccess = 0;
+                StreamWriter sw = new StreamWriter(".\\log_SyncOrders.txt");
+                for (int i = 0; i < countPhieuSync; i++)
+                {
+                    if (bgwSyncOrders.CancellationPending == true)
+                    {
+                        e.Cancel = true;
+                        sw.Close();
+                        return;
+                    }
+                    bgwSyncOrders.ReportProgress(i);
+                    if (isTest)
+                    {
+                        Thread.Sleep(100);
+                    }
+                    else
+                    {
+                        SyncPhieu(listPhieuSync[i], sw);
+                    }
+                }
+                bgwSyncOrders.ReportProgress(countPhieuSync);
+                sw.Close();
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+            }
+        }
+
+        private void ResetForm()
+        {
+            lblMessage.Text = "";
+            pgbProgress.Value = 0;
+            pgbProgress.Visible = false;
+            btnSyncOrder.Text = "Đồng bộ phiếu";
+            btnSyncCustomer.Text = "Đồng bộ khách hàng";
+            btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
+            btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
+            pgbProgress.Visible = false;
+        }
+
+        private void bgwSyncOrders_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            ResetForm();
+            if (!e.Cancelled)
+            {
+                MessageBox.Show("Thành công: " + countSuccess + "/" + countPhieuSync + " phiếu.\nChi tiết xem ở file 'logSyncOrder.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+
+        private void bgwSyncOrders_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            lblMessage.Text = "Đang đồng bộ " + e.ProgressPercentage + " / " + countPhieuSync + " phiếu";
+            if (bgwSyncOrders.CancellationPending != true)
+            {
+                pgbProgress.Value = e.ProgressPercentage;
             }
         }
     }

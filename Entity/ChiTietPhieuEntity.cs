@@ -15,7 +15,6 @@ namespace Entity
 		public String TenHang { get; set; }
 		public String TenKieuGiat { get; set; }
 		public String GhiChu { get; set; }
-
 	}
 	public class ListChiTietPhieuEntity : List<ChiTietPhieuEntity>
 	{

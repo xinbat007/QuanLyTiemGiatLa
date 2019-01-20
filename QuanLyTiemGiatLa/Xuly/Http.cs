@@ -15,7 +15,7 @@ namespace QuanLyTiemGiatLa.Xuly
         public String Data { get; set; }
     }
 
-    class Http
+    class HttpUtil
     {
         private static string m_userName = "";
         private static string m_password = "";
@@ -85,7 +85,7 @@ namespace QuanLyTiemGiatLa.Xuly
             return result;
         }
 
-        public static ResultHttp SyncOrder(string baseUrl, PhieuEntity order)
+        public static ResultHttp SyncOrder(string baseUrl, ListChiTietPhieuSyncEntity order)
         {
 //{
 //    "MaPhieu": 80,
@@ -108,24 +108,25 @@ namespace QuanLyTiemGiatLa.Xuly
             {
                 string url = baseUrl + "/order";
                 WebRequest request = WebRequest.Create(url);
-                var postData = "MaPhieu=" + order.MaPhieu +
-                    "&" + "MaKhachHang=" + order.MaKhachHang +
-                    "&" + "NgayLap=" + order.NgayLap +
-                    "&" + "NgayHenTra=" + order.NgayHenTra +
-                    "&" + "GiamGia=" + order.GiamGia +
-                    "&" + "TongTien=" + order.TongTien +
-                    "&" + "DaThanhToan=" + order.DaThanhToan +
-                    "&" + "DaTraDo=" + order.DaTraDo +
-                    "&" + "TenKhachHang=" + order.TenKhachHang +
-                    "&" + "GhiChu=" + order.GhiChu +
-                    "&" + "UserName=" + order.UserName +
-                    "&" + "SoLanIn=" + order.SoLanIn +
-                    "&" + "PhiGiaoNhan=" + order.PhiGiaoNhan +
-                    "&" + "IsPhieuHuy=" + order.IsPhieuHuy
-                    ;
-                var dataEncode = Encoding.ASCII.GetBytes(postData);
+                //var postData = "MaPhieu=" + order.MaPhieu +
+                //    "&" + "MaKhachHang=" + order.MaKhachHang +
+                //    "&" + "NgayLap=" + order.NgayLap +
+                //    "&" + "NgayHenTra=" + order.NgayHenTra +
+                //    "&" + "GiamGia=" + order.GiamGia +
+                //    "&" + "TongTien=" + order.TongTien +
+                //    "&" + "DaThanhToan=" + order.DaThanhToan +
+                //    "&" + "DaTraDo=" + order.DaTraDo +
+                //    "&" + "TenKhachHang=" + order.TenKhachHang +
+                //    "&" + "GhiChu=" + order.GhiChu +
+                //    "&" + "UserName=" + order.UserName +
+                //    "&" + "SoLanIn=" + order.SoLanIn +
+                //    "&" + "PhiGiaoNhan=" + order.PhiGiaoNhan +
+                //    "&" + "IsPhieuHuy=" + order.IsPhieuHuy
+                //    ;
+                var postDataJson = JsonConvert.SerializeObject(order, Formatting.Indented);
+                var dataEncode = Encoding.UTF8.GetBytes(postDataJson);
                 request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentType = "application/json";
                 request.ContentLength = dataEncode.Length;
                 request.UseDefaultCredentials = true;
                 request.PreAuthenticate = true;
