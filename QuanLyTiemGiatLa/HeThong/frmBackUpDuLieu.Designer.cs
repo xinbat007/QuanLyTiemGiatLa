@@ -64,6 +64,8 @@
             this.pgbProgress = new System.Windows.Forms.ProgressBar();
             this.bgwSyncOrders = new System.ComponentModel.BackgroundWorker();
             this.lblMessage = new System.Windows.Forms.Label();
+            this.bgwSyncCustomers = new System.ComponentModel.BackgroundWorker();
+            this.bgwImportCustomers = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -161,7 +163,7 @@
             // btnLuuCauHinh
             // 
             this.btnLuuCauHinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLuuCauHinh.Location = new System.Drawing.Point(652, 355);
+            this.btnLuuCauHinh.Location = new System.Drawing.Point(652, 340);
             this.btnLuuCauHinh.Name = "btnLuuCauHinh";
             this.btnLuuCauHinh.Size = new System.Drawing.Size(108, 47);
             this.btnLuuCauHinh.TabIndex = 20;
@@ -175,7 +177,7 @@
             this.btnThoat.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnThoat.Image = global::QuanLyTiemGiatLa.Properties.Resources.Exit16;
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(766, 355);
+            this.btnThoat.Location = new System.Drawing.Point(766, 340);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(89, 47);
             this.btnThoat.TabIndex = 21;
@@ -200,6 +202,7 @@
             this.groupBox1.Size = new System.Drawing.Size(397, 196);
             this.groupBox1.TabIndex = 23;
             this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Offline";
             // 
             // groupBox2
             // 
@@ -216,9 +219,10 @@
             this.groupBox2.Controls.Add(this.label5);
             this.groupBox2.Location = new System.Drawing.Point(415, 12);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(432, 331);
+            this.groupBox2.Size = new System.Drawing.Size(432, 321);
             this.groupBox2.TabIndex = 24;
             this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Online";
             // 
             // btnSyncCustomer
             // 
@@ -319,9 +323,9 @@
             // 
             // btnExportCustomer
             // 
-            this.btnExportCustomer.Location = new System.Drawing.Point(229, 64);
+            this.btnExportCustomer.Location = new System.Drawing.Point(229, 73);
             this.btnExportCustomer.Name = "btnExportCustomer";
-            this.btnExportCustomer.Size = new System.Drawing.Size(157, 26);
+            this.btnExportCustomer.Size = new System.Drawing.Size(157, 33);
             this.btnExportCustomer.TabIndex = 25;
             this.btnExportCustomer.Text = "Xuất dữ liệu KH";
             this.btnExportCustomer.UseVisualStyleBackColor = true;
@@ -337,15 +341,15 @@
             this.groupBox3.Controls.Add(this.btnImportCustomer);
             this.groupBox3.Location = new System.Drawing.Point(12, 214);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(397, 129);
+            this.groupBox3.Size = new System.Drawing.Size(397, 119);
             this.groupBox3.TabIndex = 26;
             this.groupBox3.TabStop = false;
             // 
             // btnExportBillDetail
             // 
-            this.btnExportBillDetail.Location = new System.Drawing.Point(166, 90);
+            this.btnExportBillDetail.Location = new System.Drawing.Point(10, 88);
             this.btnExportBillDetail.Name = "btnExportBillDetail";
-            this.btnExportBillDetail.Size = new System.Drawing.Size(150, 33);
+            this.btnExportBillDetail.Size = new System.Drawing.Size(150, 25);
             this.btnExportBillDetail.TabIndex = 28;
             this.btnExportBillDetail.Text = "Xuất chi tiết phiếu";
             this.btnExportBillDetail.UseVisualStyleBackColor = true;
@@ -364,9 +368,9 @@
             // 
             // btnExportBill
             // 
-            this.btnExportBill.Location = new System.Drawing.Point(10, 90);
+            this.btnExportBill.Location = new System.Drawing.Point(10, 59);
             this.btnExportBill.Name = "btnExportBill";
-            this.btnExportBill.Size = new System.Drawing.Size(150, 33);
+            this.btnExportBill.Size = new System.Drawing.Size(98, 25);
             this.btnExportBill.TabIndex = 27;
             this.btnExportBill.Text = "Xuất phiếu";
             this.btnExportBill.UseVisualStyleBackColor = true;
@@ -385,7 +389,7 @@
             // 
             this.btnImportCustomer.Location = new System.Drawing.Point(229, 25);
             this.btnImportCustomer.Name = "btnImportCustomer";
-            this.btnImportCustomer.Size = new System.Drawing.Size(157, 26);
+            this.btnImportCustomer.Size = new System.Drawing.Size(157, 33);
             this.btnImportCustomer.TabIndex = 26;
             this.btnImportCustomer.Text = "Nhập dữ liệu KH";
             this.btnImportCustomer.UseVisualStyleBackColor = true;
@@ -394,7 +398,7 @@
             // pgbProgress
             // 
             this.pgbProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pgbProgress.Location = new System.Drawing.Point(12, 379);
+            this.pgbProgress.Location = new System.Drawing.Point(12, 364);
             this.pgbProgress.Name = "pgbProgress";
             this.pgbProgress.Size = new System.Drawing.Size(553, 23);
             this.pgbProgress.TabIndex = 28;
@@ -405,22 +409,39 @@
             this.bgwSyncOrders.WorkerReportsProgress = true;
             this.bgwSyncOrders.WorkerSupportsCancellation = true;
             this.bgwSyncOrders.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSyncOrders_DoWork);
+            this.bgwSyncOrders.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwSyncOrders_ProgressChanged);
+            this.bgwSyncOrders.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSyncOrders_RunWorkerCompleted);
             // 
             // lblMessage
             // 
             this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(18, 355);
+            this.lblMessage.Location = new System.Drawing.Point(18, 340);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(89, 20);
             this.lblMessage.TabIndex = 29;
             this.lblMessage.Text = "lblMessage";
             // 
+            // bgwSyncCustomers
+            // 
+            this.bgwSyncCustomers.WorkerReportsProgress = true;
+            this.bgwSyncCustomers.WorkerSupportsCancellation = true;
+            this.bgwSyncCustomers.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwSyncCustomers_DoWork);
+            this.bgwSyncCustomers.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwSyncCustomers_ProgressChanged);
+            this.bgwSyncCustomers.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwSyncCustomers_RunWorkerCompleted);
+            // 
+            // bgwImportCustomers
+            // 
+            this.bgwImportCustomers.WorkerReportsProgress = true;
+            this.bgwImportCustomers.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwImportCustomers_DoWork);
+            this.bgwImportCustomers.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwImportCustomers_ProgressChanged);
+            this.bgwImportCustomers.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwImportCustomers_RunWorkerCompleted);
+            // 
             // frmBackUpDuLieu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 420);
+            this.ClientSize = new System.Drawing.Size(884, 405);
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -435,6 +456,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Back up dữ liệu";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmBackUpDuLieu_FormClosing);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
@@ -483,5 +505,7 @@
         private System.Windows.Forms.TextBox txtUserNameServerSync;
         private System.ComponentModel.BackgroundWorker bgwSyncOrders;
         private System.Windows.Forms.Label lblMessage;
+        private System.ComponentModel.BackgroundWorker bgwSyncCustomers;
+        private System.ComponentModel.BackgroundWorker bgwImportCustomers;
     }
 }
