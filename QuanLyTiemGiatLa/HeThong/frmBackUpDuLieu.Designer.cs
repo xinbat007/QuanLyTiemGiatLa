@@ -44,8 +44,8 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnSyncCustomer = new System.Windows.Forms.Button();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
+            this.lblCustomerNotSync = new System.Windows.Forms.Label();
+            this.lblOrderNotSync = new System.Windows.Forms.Label();
             this.txtPasswordServerSync = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
@@ -66,6 +66,7 @@
             this.lblMessage = new System.Windows.Forms.Label();
             this.bgwSyncCustomers = new System.ComponentModel.BackgroundWorker();
             this.bgwImportCustomers = new System.ComponentModel.BackgroundWorker();
+            this.bgwGetSyncInfo = new System.ComponentModel.BackgroundWorker();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -207,8 +208,8 @@
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.btnSyncCustomer);
-            this.groupBox2.Controls.Add(this.label9);
-            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.lblCustomerNotSync);
+            this.groupBox2.Controls.Add(this.lblOrderNotSync);
             this.groupBox2.Controls.Add(this.txtPasswordServerSync);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label6);
@@ -234,23 +235,23 @@
             this.btnSyncCustomer.UseVisualStyleBackColor = true;
             this.btnSyncCustomer.Click += new System.EventHandler(this.btnSyncCustomer_Click);
             // 
-            // label9
+            // lblCustomerNotSync
             // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(12, 214);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(275, 20);
-            this.label9.TabIndex = 10;
-            this.label9.Text = "Bạn có ...... khách hàng chưa đồng bộ";
+            this.lblCustomerNotSync.AutoSize = true;
+            this.lblCustomerNotSync.Location = new System.Drawing.Point(12, 214);
+            this.lblCustomerNotSync.Name = "lblCustomerNotSync";
+            this.lblCustomerNotSync.Size = new System.Drawing.Size(275, 20);
+            this.lblCustomerNotSync.TabIndex = 10;
+            this.lblCustomerNotSync.Text = "Bạn có ...... khách hàng chưa đồng bộ";
             // 
-            // label8
+            // lblOrderNotSync
             // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(12, 176);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(231, 20);
-            this.label8.TabIndex = 9;
-            this.label8.Text = "Bạn có ...... phiếu chưa đồng bộ";
+            this.lblOrderNotSync.AutoSize = true;
+            this.lblOrderNotSync.Location = new System.Drawing.Point(12, 176);
+            this.lblOrderNotSync.Name = "lblOrderNotSync";
+            this.lblOrderNotSync.Size = new System.Drawing.Size(231, 20);
+            this.lblOrderNotSync.TabIndex = 9;
+            this.lblOrderNotSync.Text = "Bạn có ...... phiếu chưa đồng bộ";
             // 
             // txtPasswordServerSync
             // 
@@ -437,6 +438,11 @@
             this.bgwImportCustomers.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.bgwImportCustomers_ProgressChanged);
             this.bgwImportCustomers.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwImportCustomers_RunWorkerCompleted);
             // 
+            // bgwGetSyncInfo
+            // 
+            this.bgwGetSyncInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwGetSyncInfo_DoWork);
+            this.bgwGetSyncInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwGetSyncInfo_RunWorkerCompleted);
+            // 
             // frmBackUpDuLieu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -497,8 +503,8 @@
         private System.Windows.Forms.Button btnExportBill;
         private System.Windows.Forms.Button btnExportBillDetail;
         private System.Windows.Forms.Button btnSyncCustomer;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label lblCustomerNotSync;
+        private System.Windows.Forms.Label lblOrderNotSync;
         private System.Windows.Forms.TextBox txtPasswordServerSync;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
@@ -507,5 +513,6 @@
         private System.Windows.Forms.Label lblMessage;
         private System.ComponentModel.BackgroundWorker bgwSyncCustomers;
         private System.ComponentModel.BackgroundWorker bgwImportCustomers;
+        private System.ComponentModel.BackgroundWorker bgwGetSyncInfo;
     }
 }

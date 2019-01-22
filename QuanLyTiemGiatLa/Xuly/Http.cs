@@ -85,7 +85,7 @@ namespace QuanLyTiemGiatLa.Xuly
             return result;
         }
 
-        public static ResultHttp SyncOrder(string baseUrl, ListChiTietPhieuSyncEntity order)
+        public static ResultHttp SyncOrder(string baseUrl, PhieuSyncEntity order)
         {
 //{
 //    "MaPhieu": 80,

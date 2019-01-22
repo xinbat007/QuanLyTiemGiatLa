@@ -37,6 +37,10 @@ namespace QuanLyTiemGiatLa.HeThong
                 txtPasswordServerSync.Text = Properties.Settings.Default.PasswordServerSync;
                 btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
                 btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
+                if (!bgwGetSyncInfo.IsBusy)
+                {
+                    bgwGetSyncInfo.RunWorkerAsync();
+                }
             }
             catch (System.Exception ex)
             {
@@ -47,6 +51,26 @@ namespace QuanLyTiemGiatLa.HeThong
          * - Cho người dùng chọn thời gian backup sau 1 ngày (mặc định là 7h tối)
          * - Người dùng chọn thư mục muốn backup ra. Có nút Backup = tay
          **/
+
+        private bool isTest = false;
+        private int countSuccess = 0;
+        private ListKhachHangEntity listCustomers = null;
+        private int countCustomerSync = 0;
+        private ListPhieuEntity listPhieuSync = null;
+        private int countPhieuSync = 0;
+
+        private void bgwGetSyncInfo_DoWork(object sender, DoWorkEventArgs e)
+        {
+            listCustomers = Business.KhachHangBO.SelectCustomerNotSync();
+            listPhieuSync = Business.PhieuBO.SelectOrderNotSync();
+            //listPhieuSync = Business.PhieuBO.SelectByTuPhieuDenPhieu(85, 90);   // thien test
+        }
+
+        private void bgwGetSyncInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            lblOrderNotSync.Text = "Bạn có " + listPhieuSync.Count + " phiếu chưa đồng bộ.";
+            lblCustomerNotSync.Text = "Bạn có " + listCustomers.Count + " khách hàng chưa đồng bộ.";
+        }
 
         private void btnThoat_Click(object sender, System.EventArgs e)
         {
@@ -197,6 +221,7 @@ namespace QuanLyTiemGiatLa.HeThong
         }
 
         private Entity.ListKhachHangEntity lstImportCustomers = null;
+        private int countImportCustomer = 0;
 
         private void btnImportCustomer_Click(object sender, System.EventArgs e)
         {
@@ -209,12 +234,16 @@ namespace QuanLyTiemGiatLa.HeThong
             lstImportCustomers = new Entity.ListKhachHangEntity();
             if (this.checkFileJson(ref lstImportCustomers))
             {
+                countImportCustomer = isTest ? 200 : lstImportCustomers.Count;
                 pgbProgress.Minimum = 0;
-                pgbProgress.Maximum = lstImportCustomers.Count;
+                pgbProgress.Maximum = countImportCustomer;
                 pgbProgress.Visible = true;
                 countSuccess = 0;
                 lblMessage.Text = "";
-                bgwImportCustomers.RunWorkerAsync();
+                if (!bgwImportCustomers.IsBusy)
+                {
+                    bgwImportCustomers.RunWorkerAsync();
+                }
             }
         }
 
@@ -223,7 +252,7 @@ namespace QuanLyTiemGiatLa.HeThong
             try
             {
                 StreamWriter sw = new StreamWriter(".\\log_ImportCustomers.txt");
-                for (int i = 0; i < lstImportCustomers.Count; ++i)
+                for (int i = 0; i < countImportCustomer; ++i)
                 {
                     bgwImportCustomers.ReportProgress(i);
                     if (isTest)
@@ -249,10 +278,13 @@ namespace QuanLyTiemGiatLa.HeThong
                         // muc do vip chua lam
                     }
                 }
-                bgwImportCustomers.ReportProgress(lstImportCustomers.Count);
-                sw.WriteLine("====================");
-                sw.WriteLine("Thành công " + countSuccess + "/" + lstImportCustomers.Count + ". Loại " + (lstImportCustomers.Count - countSuccess) + " khách hàng.");
-                sw.Close();
+                bgwImportCustomers.ReportProgress(countImportCustomer);
+                if (!isTest)
+                {
+                    sw.WriteLine("====================");
+                    sw.WriteLine("Thành công " + countSuccess + "/" + countImportCustomer + ". Loại " + (countImportCustomer - countSuccess) + " khách hàng.");
+                    sw.Close();
+                }
             }
             catch (System.Exception ex)
             {
@@ -264,17 +296,14 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             if (bgwImportCustomers.CancellationPending != true)
             {
-                lblMessage.Text = "Đang nhập khách hàng " + e.ProgressPercentage + "/" + lstImportCustomers.Count;
+                lblMessage.Text = "Đang nhập khách hàng " + e.ProgressPercentage + " / " + countImportCustomer;
                 pgbProgress.Value = e.ProgressPercentage;
             }
         }
 
         private void bgwImportCustomers_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (e.Cancelled)
-            {
-            }
-            MessageBox.Show("Nhập thành công " + countSuccess + "/" + lstImportCustomers.Count + ".\nChi tiết xem ở file 'log_ImportCustomers.txt'", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Nhập thành công " + countSuccess + "/" + countImportCustomer + ".\nChi tiết xem ở file 'log_ImportCustomers.txt'", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             lblMessage.Text = "";
             pgbProgress.Visible = false;
             btnImportCustomer.Enabled = true;
@@ -422,10 +451,7 @@ namespace QuanLyTiemGiatLa.HeThong
             else
             {
                 btnSyncOrder.Text = "Dừng";
-                btnSyncOrder.Enabled = false;
                 btnSyncCustomer.Enabled = false;
-                listPhieuSync = Business.PhieuBO.SelectNangCao(true, false, 0, "", "", false, DateTime.Now, DateTime.Now);
-                btnSyncOrder.Enabled = true;
                 countPhieuSync = isTest ? 50 : listPhieuSync.Count;
                 //================
                 pgbProgress.Minimum = 0;
@@ -436,27 +462,16 @@ namespace QuanLyTiemGiatLa.HeThong
             }
         }
 
-        private bool isTest = false;
-        private int countSuccess = 0;
-        //=======================
-        private ListPhieuEntity listPhieuSync = null;
-        private int countPhieuSync = 0;
-
         private void SyncPhieu(PhieuEntity phieu, StreamWriter sw)
         {
             ListChiTietPhieuEntity lstCTPhieu = Business.ChiTietPhieuBO.SelectByMaPhieu(phieu.MaPhieu);
-            ListChiTietPhieuSyncEntity lstCTPhieuSync = new ListChiTietPhieuSyncEntity();
-            for (int k = 0; k < lstCTPhieu.Count; k++)
-            {
-                ChiTietPhieuEntity ctPhieu = lstCTPhieu[k];
-                ChiTietPhieuSyncEntity ctPhieuSync = new ChiTietPhieuSyncEntity();
-                ctPhieuSync.CopyFromPhieu(phieu);
-                ctPhieuSync.CopyFromCTPhieu(ctPhieu);
-                lstCTPhieuSync.Add(ctPhieuSync);
-            }
-            ResultHttp result = Xuly.HttpUtil.SyncOrder(txtPathServer.Text, lstCTPhieuSync);
+            PhieuSyncEntity phieuSync = new PhieuSyncEntity();
+            phieuSync.CopyFromPhieu(phieu);
+            phieuSync.ChiTietPhieu = lstCTPhieu;
+            ResultHttp result = Xuly.HttpUtil.SyncOrder(txtPathServer.Text, phieuSync);
             if (result.Code == "200")
             {
+                Business.PhieuBO.UpdateIsSync(phieu.MaPhieu, true);
                 sw.WriteLine("Thành công phiếu '" + phieu.MaPhieu + "': " + result.Message);
                 countSuccess++;
             }
@@ -512,6 +527,10 @@ namespace QuanLyTiemGiatLa.HeThong
             btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
             btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
             pgbProgress.Visible = false;
+            if (!bgwGetSyncInfo.IsBusy)
+            {
+                bgwGetSyncInfo.RunWorkerAsync();
+            }
         }
 
         private void bgwSyncOrders_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -536,9 +555,6 @@ namespace QuanLyTiemGiatLa.HeThong
             }
         }
 
-        private int countCustomerSync = 0;
-        private ListKhachHangEntity listCustomers = null;
-
         private void btnSyncCustomer_Click(object sender, EventArgs e)
         {
             if (bgwSyncCustomers.IsBusy)
@@ -550,8 +566,6 @@ namespace QuanLyTiemGiatLa.HeThong
                 btnSyncCustomer.Text = "Dừng";
                 btnSyncOrder.Enabled = false;
                 btnSyncCustomer.Enabled = false;
-                var khachhang = new Entity.KhachHangEntity();
-                listCustomers = Business.KhachHangBO.Search(khachhang);
                 btnSyncCustomer.Enabled = true;
                 countCustomerSync = isTest ? 50 : listCustomers.Count;
                 //================
@@ -569,6 +583,7 @@ namespace QuanLyTiemGiatLa.HeThong
             if (result.Code == "200")
             {
                 sw.WriteLine("Thành công khách hàng '" + khach.TenKhachHang + "', '" + khach.DienThoai + "': " + result.Message);
+                Business.KhachHangBO.UpdateIsSync(khach.MaKhachHang, true);
                 countSuccess++;
             }
             else

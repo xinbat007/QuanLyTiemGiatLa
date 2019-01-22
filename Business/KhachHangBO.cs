@@ -26,6 +26,11 @@ namespace Business
             return KhachHangDA.SelectByMaPhieu(maphieu);
         }
 
+        public static ListKhachHangEntity SelectCustomerNotSync()
+        {
+            return KhachHangDA.SelectCustomerNotSync();
+        }
+
         public static ListKhachHangEntity SearchByWhere(String where, DateTime tungay, DateTime denngay, Boolean tatca)
         {
             return KhachHangDA.SearchByWhere(where, tungay, denngay, tatca);
@@ -49,6 +54,11 @@ namespace Business
         public static Int32 Update(KhachHangEntity khachhang)
         {
             return KhachHangDA.Update(khachhang);
+        }
+
+        public static Int32 UpdateIsSync(Int64 makhachhang, bool isSynced)
+        {
+            return KhachHangDA.UpdateIsSync(makhachhang, isSynced);
         }
 
         public static Int32 Delete(Int64 MaKhachHang)

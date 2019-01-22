@@ -20,11 +20,12 @@ namespace Entity
 		public Int32 SoLanIn { get; set; }
 		public Int32 PhiGiaoNhan { get; set; }
         public Boolean IsPhieuHuy { get; set; }
+        public Boolean IsSynced { get; set; }
 	}
 	public class ListPhieuEntity : List<PhieuEntity>
 	{
     }
-    public class ChiTietPhieuSyncEntity
+    public class PhieuSyncEntity
     {
         // Phieu
         public Int64 MaPhieu { get; set; }
@@ -41,27 +42,7 @@ namespace Entity
         public Int32 SoLanIn { get; set; }
         public Int32 PhiGiaoNhan { get; set; }
         public Boolean IsPhieuHuy { get; set; }
-        // Chi tiet Phieu
-        public Int64 IDChiTietPhieu { get; set; }
-        public Int32 MaHang { get; set; }
-        public Int32 Soluong { get; set; }
-        public Int32 MaKieuGiat { get; set; }
-        public Int64 DonGia { get; set; }
-        public String TenHang { get; set; }
-        public String TenKieuGiat { get; set; }
-        public String GhiChuCTPhieu { get; set; }
-
-        public void CopyFromCTPhieu(ChiTietPhieuEntity ctphieu)
-        {
-            this.IDChiTietPhieu = ctphieu.IDChiTietPhieu;
-            this.MaHang = ctphieu.MaHang;
-            this.Soluong = ctphieu.Soluong;
-            this.MaKieuGiat = ctphieu.MaKieuGiat;
-            this.DonGia = ctphieu.DonGia;
-            this.TenHang = ctphieu.TenHang;
-            this.TenKieuGiat = ctphieu.TenKieuGiat;
-            this.GhiChuCTPhieu = ctphieu.GhiChu;
-        }
+        public ListChiTietPhieuEntity ChiTietPhieu { get; set; }
 
         public void CopyFromPhieu(PhieuEntity phieu)
         {
@@ -80,8 +61,5 @@ namespace Entity
             this.PhiGiaoNhan = phieu.PhiGiaoNhan;
             this.IsPhieuHuy = phieu.IsPhieuHuy;
         }
-    }
-    public class ListChiTietPhieuSyncEntity : List<ChiTietPhieuSyncEntity>
-    {
     }
 }

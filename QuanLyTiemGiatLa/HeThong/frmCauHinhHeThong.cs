@@ -113,12 +113,17 @@ namespace QuanLyTiemGiatLa.HeThong
             this.Close();
         }
 
+        private frmBackUpDuLieu m_frmBackupDuLieu = null;
+
         private void btnBackUp_Click(object sender, EventArgs e)
         {
             try
             {
-                frmBackUpDuLieu frm = new frmBackUpDuLieu();
-                frm.ShowDialog(this);
+                if (m_frmBackupDuLieu == null || m_frmBackupDuLieu.IsDisposed)
+                {
+                    m_frmBackupDuLieu = new frmBackUpDuLieu();
+                }
+                m_frmBackupDuLieu.ShowDialog(this);
             }
             catch (System.Exception ex)
             {

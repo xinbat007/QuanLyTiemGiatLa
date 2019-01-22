@@ -209,6 +209,46 @@ namespace DataAccess
             return kq;
         }
 
+        public static ListPhieuEntity SelectOrderNotSync()
+        {
+            SqlCommand command = DUtils.GetCommand();
+            command.CommandType = System.Data.CommandType.Text;
+            command.CommandText = @"SELECT
+    dbo.Phieu.*,
+	dbo.KhachHang.TenKhachHang
+    FROM dbo.Phieu LEFT OUTER JOIN dbo.KhachHang ON dbo.Phieu.MaKhachHang = dbo.KhachHang.MaKhachHang
+    WHERE dbo.Phieu.[IsSynced] IS NULL OR dbo.Phieu.[IsSynced] = 0
+    ORDER BY dbo.Phieu.MaPhieu";
+            ListPhieuEntity kq = new ListPhieuEntity();
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                PhieuEntity phieu = null;
+                while (reader.Read())
+                {
+                    phieu = new PhieuEntity();
+                    phieu.MaPhieu = Convert.ToInt64(reader["MaPhieu"]);
+                    phieu.MaKhachHang = reader["MaKhachHang"] == DBNull.Value ? 0 : (Int64)reader["MaKhachHang"];
+                    phieu.TenKhachHang = reader["TenKhachHang"].ToString();
+                    phieu.NgayLap = (DateTime)reader["NgayLap"];
+                    phieu.NgayHenTra = (DateTime)reader["NgayHenTra"];
+                    if (reader["GiamGia"] != DBNull.Value)
+                        phieu.GiamGia = Convert.ToInt32(reader["GiamGia"]);
+                    phieu.DaThanhToan = (Boolean)reader["DaThanhToan"];
+                    phieu.DaTraDo = (Boolean)reader["DaTraDo"];
+                    phieu.TongTien = DUtils.ReadInt64(reader["TongTien"]);
+                    if (reader["GhiChu"] != DBNull.Value)
+                        phieu.GhiChu = reader["GhiChu"].ToString();
+                    phieu.UserName = reader["UserName"].ToString();
+                    phieu.PhiGiaoNhan = DUtils.ReadInt32(reader["PhiGiaoNhan"]);
+                    phieu.IsPhieuHuy = DUtils.ReadBoolean(reader["IsPhieuHuy"]);
+                    kq.Add(phieu);
+                }
+                reader.Close();
+            }
+            command.Connection.Close();
+            return kq;
+        }
+
         public static Int64 SelectSumTongTienByMaPhieu(Int64 tuphieu, Int64 denphieu)
         {
             SqlCommand command = DUtils.GetCommand();
@@ -363,7 +403,9 @@ namespace DataAccess
             param.Value = true;
             command.Parameters.Add(param);
 
-            return command.ExecuteNonQuery();
+            Int32 result = command.ExecuteNonQuery();
+            UpdateIsSync(maphieu, false);
+            return result;
         }
 
         public static Int32 UpdateDaHuyPhieu(Int64 maphieu)
@@ -371,6 +413,17 @@ namespace DataAccess
             SqlCommand command = DUtils.GetCommand();
             command.CommandType = System.Data.CommandType.Text;
             command.CommandText = "update phieu set isphieuhuy=1 where maphieu=" + maphieu;
+
+            Int32 result = command.ExecuteNonQuery();
+            UpdateIsSync(maphieu, false);
+            return result;
+        }
+
+        public static Int32 UpdateIsSync(Int64 maphieu, bool isSynced)
+        {
+            SqlCommand command = DUtils.GetCommand();
+            command.CommandType = System.Data.CommandType.Text;
+            command.CommandText = @"UPDATE dbo.Phieu SET IsSynced=" + (isSynced ? 1 : 0) + " WHERE MaPhieu=" + maphieu;
 
             return command.ExecuteNonQuery();
         }

@@ -199,6 +199,40 @@ namespace DataAccess
             return kq;
         }
 
+        public static ListKhachHangEntity SelectCustomerNotSync()
+        {
+            SqlCommand command = DUtils.GetCommand();
+            command.CommandType = System.Data.CommandType.Text;
+            command.CommandText = @"SELECT 
+    dbo.KhachHang.*,
+    dbo.MucDoVip.TenVip,
+    dbo.MucDoVip.GiamGia
+    FROM dbo.KhachHang LEFT OUTER JOIN dbo.MucDoVip
+    ON dbo.KhachHang.MaVip = dbo.MucDoVip.MaVip WHERE dbo.KhachHang.[IsSynced] IS NULL OR dbo.KhachHang.[IsSynced] = 0";
+            ListKhachHangEntity kq = new ListKhachHangEntity();
+            using (SqlDataReader reader = command.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    KhachHangEntity khachhang = new KhachHangEntity()
+                    {
+                        MaKhachHang = DUtils.ReadInt64(reader["MaKhachHang"]),
+                        TenKhachHang = reader["TenKhachHang"].ToString(),
+                        DiaChi = reader["DiaChi"] == null ? String.Empty : reader["DiaChi"].ToString(),
+                        DienThoai = reader["DienThoai"] == null ? String.Empty : reader["DienThoai"].ToString(),
+                        MaVip = reader["MaVip"] == DBNull.Value ? 0 : (Int32)reader["MaVip"],
+                        SoTheVip = DUtils.ReadString(reader["SoTheVip"]),
+                        TenVip = reader["TenVip"] == DBNull.Value ? String.Empty : reader["TenVip"].ToString(),
+                        GiamGia = reader["GiamGia"] == DBNull.Value ? 0 : (Int32)reader["GiamGia"]
+                    };
+                    kq.Add(khachhang);
+                }
+                reader.Close();
+            }
+            command.Connection.Close();
+            return kq;
+        }
+
         public static ListKhachHangEntity SearchByWhere(String where, DateTime tungay, DateTime denngay, Boolean tatca)
         {
             SqlCommand command = DUtils.GetCommand();
@@ -396,6 +430,17 @@ namespace DataAccess
                 param.Value = khachhang.SoTheVip;
                 command.Parameters.Add(param);
             }
+            int result = command.ExecuteNonQuery();
+            UpdateIsSync(khachhang.MaKhachHang, false);
+            return result;
+        }
+
+        public static Int32 UpdateIsSync(Int64 makhachhang, bool isSynced)
+        {
+            SqlCommand command = DUtils.GetCommand();
+            command.CommandType = System.Data.CommandType.Text;
+            command.CommandText = @"UPDATE dbo.KhachHang SET IsSynced=" + (isSynced ? 1 : 0) + " WHERE MaKhachHang=" + makhachhang;
+
             return command.ExecuteNonQuery();
         }
 

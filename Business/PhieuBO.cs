@@ -29,6 +29,11 @@ namespace Business
             return DataAccess.PhieuDA.SelectByTuPhieuDenPhieu(tuphieu, denphieu);
         }
 
+        public static ListPhieuEntity SelectOrderNotSync()
+        {
+            return DataAccess.PhieuDA.SelectOrderNotSync();
+        }
+
         public static Int64 SelectSumTongTienByMaPhieu(Int64 tuphieu, Int64 denphieu)
         {
             return DataAccess.PhieuDA.SelectSumTongTienByMaPhieu(tuphieu, denphieu);
@@ -57,6 +62,11 @@ namespace Business
         public static Int32 UpdateDaTraDo(Int64 maphieu)
         {
             return DataAccess.PhieuDA.UpdateDaTraDo(maphieu);
+        }
+
+        public static Int32 UpdateIsSync(Int64 maphieu, bool isSynced)
+        {
+            return DataAccess.PhieuDA.UpdateIsSync(maphieu, isSynced);
         }
 
         public static Int32 UpdateDaHuyPhieu(Int64 maphieu)
