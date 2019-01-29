@@ -28,7 +28,7 @@ namespace QuanLyTiemGiatLa
             this.LoadQuyenButton();
             this.LoadMauTrangThaiDo();
             this.KhoiDongTimerAutoBackup();
-            this.tsslbPhienBan.Text = "Phiên bản ngày 22/01/2019";
+            this.tsslbPhienBan.Text = "Phiên bản ngày 30/01/2019";
             this.label1.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadTenCuaHang();
             this.label2.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadDiaChiCuaHang();
             this.label3.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadSoDienThoai();

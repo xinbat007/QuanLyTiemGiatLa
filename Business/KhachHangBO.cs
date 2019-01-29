@@ -61,6 +61,11 @@ namespace Business
             return KhachHangDA.UpdateIsSync(makhachhang, isSynced);
         }
 
+        public static Int32 UpdateUnSyncedAll()
+        {
+            return KhachHangDA.UpdateUnSyncedAll();
+        }
+
         public static Int32 Delete(Int64 MaKhachHang)
         {
             return KhachHangDA.Delete(MaKhachHang);

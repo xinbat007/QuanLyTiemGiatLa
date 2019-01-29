@@ -63,7 +63,6 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             listCustomers = Business.KhachHangBO.SelectCustomerNotSync();
             listPhieuSync = Business.PhieuBO.SelectOrderNotSync();
-            //listPhieuSync = Business.PhieuBO.SelectByTuPhieuDenPhieu(85, 90);   // thien test
         }
 
         private void bgwGetSyncInfo_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -650,6 +649,31 @@ namespace QuanLyTiemGiatLa.HeThong
             else
             {
                 MessageBox.Show("Bạn đã dừng đồng bộ " + countSuccess + "/" + countCustomerSync + " khách hàng.\nChi tiết xem ở file 'log_SyncCustomers.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+
+        private void btnUnSyncedAll_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Đây là tính năng set toàn bộ CSDL về trạng thái chưa đồng bộ.\nBạn có chắc chắn không?", "Thông báo", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                return;
+            btnUnSyncedAll.Enabled = false;
+            try
+            {
+                Business.PhieuBO.UpdateUnSyncedAll();
+                Business.KhachHangBO.UpdateUnSyncedAll();
+                if (!bgwGetSyncInfo.IsBusy)
+                {
+                    bgwGetSyncInfo.RunWorkerAsync();
+                }
+                MessageBox.Show("Done!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+            finally
+            {
+                btnUnSyncedAll.Enabled = true;
             }
         }
     }

@@ -428,6 +428,15 @@ namespace DataAccess
             return command.ExecuteNonQuery();
         }
 
+        public static Int32 UpdateUnSyncedAll()
+        {
+            SqlCommand command = DUtils.GetCommand();
+            command.CommandType = System.Data.CommandType.Text;
+            command.CommandText = @"UPDATE dbo.Phieu SET IsSynced=0";
+
+            return command.ExecuteNonQuery();
+        }
+
         public static Int32 UpdateSoLanIn(Int64 maphieu, Int32 solanin)
         {
             SqlCommand command = DUtils.GetCommand();

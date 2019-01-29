@@ -64,14 +64,19 @@ namespace Business
             return DataAccess.PhieuDA.UpdateDaTraDo(maphieu);
         }
 
+        public static Int32 UpdateDaHuyPhieu(Int64 maphieu)
+        {
+            return DataAccess.PhieuDA.UpdateDaHuyPhieu(maphieu);
+        }
+
         public static Int32 UpdateIsSync(Int64 maphieu, bool isSynced)
         {
             return DataAccess.PhieuDA.UpdateIsSync(maphieu, isSynced);
         }
 
-        public static Int32 UpdateDaHuyPhieu(Int64 maphieu)
+        public static Int32 UpdateUnSyncedAll()
         {
-            return DataAccess.PhieuDA.UpdateDaHuyPhieu(maphieu);
+            return DataAccess.PhieuDA.UpdateUnSyncedAll();
         }
 
         public static Int32 UpdateSoLanIn(Int64 maphieu, Int32 solanin)

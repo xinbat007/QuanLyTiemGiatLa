@@ -67,6 +67,7 @@
             this.bgwSyncCustomers = new System.ComponentModel.BackgroundWorker();
             this.bgwImportCustomers = new System.ComponentModel.BackgroundWorker();
             this.bgwGetSyncInfo = new System.ComponentModel.BackgroundWorker();
+            this.btnUnSyncedAll = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -207,6 +208,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.btnUnSyncedAll);
             this.groupBox2.Controls.Add(this.btnSyncCustomer);
             this.groupBox2.Controls.Add(this.lblCustomerNotSync);
             this.groupBox2.Controls.Add(this.lblOrderNotSync);
@@ -227,9 +229,9 @@
             // 
             // btnSyncCustomer
             // 
-            this.btnSyncCustomer.Location = new System.Drawing.Point(201, 261);
+            this.btnSyncCustomer.Location = new System.Drawing.Point(166, 255);
             this.btnSyncCustomer.Name = "btnSyncCustomer";
-            this.btnSyncCustomer.Size = new System.Drawing.Size(170, 47);
+            this.btnSyncCustomer.Size = new System.Drawing.Size(170, 53);
             this.btnSyncCustomer.TabIndex = 11;
             this.btnSyncCustomer.Text = "Đồng bộ khách hàng";
             this.btnSyncCustomer.UseVisualStyleBackColor = true;
@@ -295,9 +297,9 @@
             // 
             // btnSyncOrder
             // 
-            this.btnSyncOrder.Location = new System.Drawing.Point(16, 261);
+            this.btnSyncOrder.Location = new System.Drawing.Point(16, 255);
             this.btnSyncOrder.Name = "btnSyncOrder";
-            this.btnSyncOrder.Size = new System.Drawing.Size(144, 47);
+            this.btnSyncOrder.Size = new System.Drawing.Size(144, 53);
             this.btnSyncOrder.TabIndex = 2;
             this.btnSyncOrder.Text = "Đồng bộ phiếu";
             this.btnSyncOrder.UseVisualStyleBackColor = true;
@@ -443,6 +445,16 @@
             this.bgwGetSyncInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwGetSyncInfo_DoWork);
             this.bgwGetSyncInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwGetSyncInfo_RunWorkerCompleted);
             // 
+            // btnUnSyncedAll
+            // 
+            this.btnUnSyncedAll.Location = new System.Drawing.Point(341, 255);
+            this.btnUnSyncedAll.Name = "btnUnSyncedAll";
+            this.btnUnSyncedAll.Size = new System.Drawing.Size(85, 53);
+            this.btnUnSyncedAll.TabIndex = 12;
+            this.btnUnSyncedAll.Text = "Set all unsynced";
+            this.btnUnSyncedAll.UseVisualStyleBackColor = true;
+            this.btnUnSyncedAll.Click += new System.EventHandler(this.btnUnSyncedAll_Click);
+            // 
             // frmBackUpDuLieu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -514,5 +526,6 @@
         private System.ComponentModel.BackgroundWorker bgwSyncCustomers;
         private System.ComponentModel.BackgroundWorker bgwImportCustomers;
         private System.ComponentModel.BackgroundWorker bgwGetSyncInfo;
+        private System.Windows.Forms.Button btnUnSyncedAll;
     }
 }
