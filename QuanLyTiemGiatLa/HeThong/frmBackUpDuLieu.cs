@@ -35,6 +35,9 @@ namespace QuanLyTiemGiatLa.HeThong
                 txtPathServer.Text = Properties.Settings.Default.PathServerSync;
                 txtUserNameServerSync.Text = Properties.Settings.Default.UserNameServerSync;
                 txtPasswordServerSync.Text = Properties.Settings.Default.PasswordServerSync;
+                chkAutoSync.Checked = Properties.Settings.Default.AutoSync;
+                cboHourAutoSync.Text = Properties.Settings.Default.HourAutoSync.ToString();
+                cboHourAutoSync.Enabled = chkAutoSync.Checked;
                 btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
                 btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
                 if (!bgwGetSyncInfo.IsBusy)
@@ -143,6 +146,8 @@ namespace QuanLyTiemGiatLa.HeThong
                 Properties.Settings.Default.PathServerSync = txtPathServer.Text;
                 Properties.Settings.Default.UserNameServerSync = txtUserNameServerSync.Text;
                 Properties.Settings.Default.PasswordServerSync = txtPasswordServerSync.Text;
+                Properties.Settings.Default.AutoSync = chkAutoSync.Checked;
+                Properties.Settings.Default.HourAutoSync = int.Parse(cboHourAutoSync.Text);
                 Properties.Settings.Default.Save();
             }
             catch (System.Exception ex)
@@ -675,6 +680,11 @@ namespace QuanLyTiemGiatLa.HeThong
             {
                 btnUnSyncedAll.Enabled = true;
             }
+        }
+
+        private void chkAutoSync_CheckedChanged(object sender, EventArgs e)
+        {
+            cboHourAutoSync.Enabled = chkAutoSync.Checked;
         }
     }
 }

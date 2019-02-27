@@ -364,7 +364,7 @@
             this.btnBackUp.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnBackUp.Location = new System.Drawing.Point(12, 359);
             this.btnBackUp.Name = "btnBackUp";
-            this.btnBackUp.Size = new System.Drawing.Size(89, 47);
+            this.btnBackUp.Size = new System.Drawing.Size(141, 47);
             this.btnBackUp.TabIndex = 2;
             this.btnBackUp.Text = "Backup ...";
             this.btnBackUp.UseVisualStyleBackColor = true;

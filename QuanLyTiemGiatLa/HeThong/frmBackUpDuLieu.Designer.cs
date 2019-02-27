@@ -43,6 +43,7 @@
             this.btnThoat = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.btnUnSyncedAll = new System.Windows.Forms.Button();
             this.btnSyncCustomer = new System.Windows.Forms.Button();
             this.lblCustomerNotSync = new System.Windows.Forms.Label();
             this.lblOrderNotSync = new System.Windows.Forms.Label();
@@ -67,7 +68,9 @@
             this.bgwSyncCustomers = new System.ComponentModel.BackgroundWorker();
             this.bgwImportCustomers = new System.ComponentModel.BackgroundWorker();
             this.bgwGetSyncInfo = new System.ComponentModel.BackgroundWorker();
-            this.btnUnSyncedAll = new System.Windows.Forms.Button();
+            this.chkAutoSync = new System.Windows.Forms.CheckBox();
+            this.cboHourAutoSync = new System.Windows.Forms.ComboBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -165,7 +168,7 @@
             // btnLuuCauHinh
             // 
             this.btnLuuCauHinh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLuuCauHinh.Location = new System.Drawing.Point(652, 340);
+            this.btnLuuCauHinh.Location = new System.Drawing.Point(652, 338);
             this.btnLuuCauHinh.Name = "btnLuuCauHinh";
             this.btnLuuCauHinh.Size = new System.Drawing.Size(108, 47);
             this.btnLuuCauHinh.TabIndex = 20;
@@ -179,7 +182,7 @@
             this.btnThoat.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.btnThoat.Image = global::QuanLyTiemGiatLa.Properties.Resources.Exit16;
             this.btnThoat.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.btnThoat.Location = new System.Drawing.Point(766, 340);
+            this.btnThoat.Location = new System.Drawing.Point(766, 338);
             this.btnThoat.Name = "btnThoat";
             this.btnThoat.Size = new System.Drawing.Size(89, 47);
             this.btnThoat.TabIndex = 21;
@@ -208,6 +211,9 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Controls.Add(this.cboHourAutoSync);
+            this.groupBox2.Controls.Add(this.chkAutoSync);
             this.groupBox2.Controls.Add(this.btnUnSyncedAll);
             this.groupBox2.Controls.Add(this.btnSyncCustomer);
             this.groupBox2.Controls.Add(this.lblCustomerNotSync);
@@ -227,9 +233,19 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Online";
             // 
+            // btnUnSyncedAll
+            // 
+            this.btnUnSyncedAll.Location = new System.Drawing.Point(341, 217);
+            this.btnUnSyncedAll.Name = "btnUnSyncedAll";
+            this.btnUnSyncedAll.Size = new System.Drawing.Size(85, 53);
+            this.btnUnSyncedAll.TabIndex = 12;
+            this.btnUnSyncedAll.Text = "Set all unsynced";
+            this.btnUnSyncedAll.UseVisualStyleBackColor = true;
+            this.btnUnSyncedAll.Click += new System.EventHandler(this.btnUnSyncedAll_Click);
+            // 
             // btnSyncCustomer
             // 
-            this.btnSyncCustomer.Location = new System.Drawing.Point(166, 255);
+            this.btnSyncCustomer.Location = new System.Drawing.Point(165, 217);
             this.btnSyncCustomer.Name = "btnSyncCustomer";
             this.btnSyncCustomer.Size = new System.Drawing.Size(170, 53);
             this.btnSyncCustomer.TabIndex = 11;
@@ -240,7 +256,7 @@
             // lblCustomerNotSync
             // 
             this.lblCustomerNotSync.AutoSize = true;
-            this.lblCustomerNotSync.Location = new System.Drawing.Point(12, 214);
+            this.lblCustomerNotSync.Location = new System.Drawing.Point(12, 191);
             this.lblCustomerNotSync.Name = "lblCustomerNotSync";
             this.lblCustomerNotSync.Size = new System.Drawing.Size(275, 20);
             this.lblCustomerNotSync.TabIndex = 10;
@@ -249,7 +265,7 @@
             // lblOrderNotSync
             // 
             this.lblOrderNotSync.AutoSize = true;
-            this.lblOrderNotSync.Location = new System.Drawing.Point(12, 176);
+            this.lblOrderNotSync.Location = new System.Drawing.Point(12, 162);
             this.lblOrderNotSync.Name = "lblOrderNotSync";
             this.lblOrderNotSync.Size = new System.Drawing.Size(231, 20);
             this.lblOrderNotSync.TabIndex = 9;
@@ -297,7 +313,7 @@
             // 
             // btnSyncOrder
             // 
-            this.btnSyncOrder.Location = new System.Drawing.Point(16, 255);
+            this.btnSyncOrder.Location = new System.Drawing.Point(16, 217);
             this.btnSyncOrder.Name = "btnSyncOrder";
             this.btnSyncOrder.Size = new System.Drawing.Size(144, 53);
             this.btnSyncOrder.TabIndex = 2;
@@ -401,7 +417,7 @@
             // pgbProgress
             // 
             this.pgbProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.pgbProgress.Location = new System.Drawing.Point(12, 364);
+            this.pgbProgress.Location = new System.Drawing.Point(12, 362);
             this.pgbProgress.Name = "pgbProgress";
             this.pgbProgress.Size = new System.Drawing.Size(553, 23);
             this.pgbProgress.TabIndex = 28;
@@ -419,7 +435,7 @@
             // 
             this.lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lblMessage.AutoSize = true;
-            this.lblMessage.Location = new System.Drawing.Point(18, 340);
+            this.lblMessage.Location = new System.Drawing.Point(18, 338);
             this.lblMessage.Name = "lblMessage";
             this.lblMessage.Size = new System.Drawing.Size(89, 20);
             this.lblMessage.TabIndex = 29;
@@ -445,21 +461,65 @@
             this.bgwGetSyncInfo.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwGetSyncInfo_DoWork);
             this.bgwGetSyncInfo.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwGetSyncInfo_RunWorkerCompleted);
             // 
-            // btnUnSyncedAll
+            // chkAutoSync
             // 
-            this.btnUnSyncedAll.Location = new System.Drawing.Point(341, 255);
-            this.btnUnSyncedAll.Name = "btnUnSyncedAll";
-            this.btnUnSyncedAll.Size = new System.Drawing.Size(85, 53);
-            this.btnUnSyncedAll.TabIndex = 12;
-            this.btnUnSyncedAll.Text = "Set all unsynced";
-            this.btnUnSyncedAll.UseVisualStyleBackColor = true;
-            this.btnUnSyncedAll.Click += new System.EventHandler(this.btnUnSyncedAll_Click);
+            this.chkAutoSync.AutoSize = true;
+            this.chkAutoSync.Location = new System.Drawing.Point(16, 280);
+            this.chkAutoSync.Name = "chkAutoSync";
+            this.chkAutoSync.Size = new System.Drawing.Size(148, 24);
+            this.chkAutoSync.TabIndex = 13;
+            this.chkAutoSync.Text = "Tự động đồng bộ";
+            this.chkAutoSync.UseVisualStyleBackColor = true;
+            this.chkAutoSync.CheckedChanged += new System.EventHandler(this.chkAutoSync_CheckedChanged);
+            // 
+            // cboHourAutoSync
+            // 
+            this.cboHourAutoSync.FormattingEnabled = true;
+            this.cboHourAutoSync.Items.AddRange(new object[] {
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "10",
+            "11",
+            "12",
+            "13",
+            "14",
+            "15",
+            "16",
+            "17",
+            "18",
+            "19",
+            "20",
+            "21",
+            "22",
+            "23",
+            "24"});
+            this.cboHourAutoSync.Location = new System.Drawing.Point(170, 278);
+            this.cboHourAutoSync.Name = "cboHourAutoSync";
+            this.cboHourAutoSync.Size = new System.Drawing.Size(55, 28);
+            this.cboHourAutoSync.TabIndex = 14;
+            this.cboHourAutoSync.Text = "12";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(231, 281);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(30, 20);
+            this.label8.TabIndex = 16;
+            this.label8.Text = "giờ";
             // 
             // frmBackUpDuLieu
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(884, 405);
+            this.ClientSize = new System.Drawing.Size(884, 403);
             this.Controls.Add(this.lblMessage);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
@@ -527,5 +587,8 @@
         private System.ComponentModel.BackgroundWorker bgwImportCustomers;
         private System.ComponentModel.BackgroundWorker bgwGetSyncInfo;
         private System.Windows.Forms.Button btnUnSyncedAll;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ComboBox cboHourAutoSync;
+        private System.Windows.Forms.CheckBox chkAutoSync;
     }
 }

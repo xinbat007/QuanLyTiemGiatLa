@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Timers;
 
 namespace QuanLyTiemGiatLa
 {
@@ -28,6 +29,7 @@ namespace QuanLyTiemGiatLa
             this.LoadQuyenButton();
             this.LoadMauTrangThaiDo();
             this.KhoiDongTimerAutoBackup();
+            this.InitTimerAutoSyncOnline();
             this.tsslbPhienBan.Text = "Phiên bản ngày 30/01/2019";
             this.label1.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadTenCuaHang();
             this.label2.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadDiaChiCuaHang();
@@ -337,7 +339,7 @@ namespace QuanLyTiemGiatLa
             btnCatDo_Click(sender, e);
         }
 
-        private Timer _timerAutoBackup;
+        private System.Windows.Forms.Timer m_timerAutoBackup;
         private void KhoiDongTimerAutoBackup()
         {
             try
@@ -346,16 +348,16 @@ namespace QuanLyTiemGiatLa
                 iniBackup.Read();
                 if (!String.IsNullOrEmpty(iniBackup.DuongDanLuuThuMucFileBackup))
                 {
-                    _timerAutoBackup = new Timer();
-                    _timerAutoBackup.Interval = 900000;//15 phut * 60 = 900 giay * 1000 = 900.000
-                    _timerAutoBackup.Tick += new EventHandler(delegate (object s, EventArgs e)
+                    m_timerAutoBackup = new System.Windows.Forms.Timer();
+                    m_timerAutoBackup.Interval = 900000;//15 phut * 60 = 900 giay * 1000 = 900.000
+                    m_timerAutoBackup.Tick += new EventHandler(delegate (object s, EventArgs e)
                     {
                         try
                         {
                             if (DateTime.Now.Hour == iniBackup.ThoiGianTuDongBackUp)
                             {
-                                _timerAutoBackup.Stop();
-                                _timerAutoBackup.Dispose();
+                                m_timerAutoBackup.Stop();
+                                m_timerAutoBackup.Dispose();
                                 int result = Xuly.Xuly.AutoBackup(iniBackup.DuongDanLuuThuMucFileBackup, iniBackup.DuongDanLuuThuMucCopyTo);
                                 if (result == 1)
                                 {
@@ -365,12 +367,12 @@ namespace QuanLyTiemGiatLa
                         }
                         catch (System.Exception ex)
                         {
-                            _timerAutoBackup.Stop();
-                            _timerAutoBackup.Dispose();
+                            m_timerAutoBackup.Stop();
+                            m_timerAutoBackup.Dispose();
                             MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
                     });
-                    _timerAutoBackup.Start();
+                    m_timerAutoBackup.Start();
                 }
             }
             catch (System.Exception ex)
@@ -379,5 +381,59 @@ namespace QuanLyTiemGiatLa
             }
         }
 
+        private int calculateElapseTimeToSync()
+        {
+            int hourToSync = Properties.Settings.Default.HourAutoSync;
+            int currentHour = DateTime.Now.Hour;
+            int currentMinute = DateTime.Now.Minute;
+            Console.WriteLine("Current time is: " + currentHour + ":" + currentMinute);
+            int elapseTime = 0;
+            if (currentHour < hourToSync)
+            {
+                int elapseMinuteToNextHour = (60 - currentMinute) * 60 * 1000;
+                int elapseHour = (hourToSync - currentHour - 1) * 60 * 60 * 1000;
+                elapseTime = elapseMinuteToNextHour + elapseHour;
+            }
+            else
+            {
+                int elapseMinuteToNextHour = (60 - currentMinute) * 60 * 1000;
+                int elapseTimeTo24h = (24 - currentHour - 1) * 60 * 60 * 1000;
+                int elapseTimeHour = hourToSync * 60 * 60 * 1000;
+                elapseTime = elapseMinuteToNextHour + elapseTimeTo24h + elapseTimeHour;
+            }
+            int hourWait = elapseTime / (60 * 60 * 1000);
+            int minuteWait = (elapseTime - (hourWait * 60 * 60 * 1000)) / (1000 * 60);
+            Console.WriteLine("Wait " + hourWait + " hour " + minuteWait + " minute to trigger!");
+            return elapseTime;
+        }
+
+        private static System.Timers.Timer m_timerAutoSync;
+        private void InitTimerAutoSyncOnline()
+        {
+            try
+            {
+                bool isAutoSync = Properties.Settings.Default.AutoSync;
+                if (isAutoSync)
+                {
+                    int elapseTime = calculateElapseTimeToSync();
+                    m_timerAutoSync = new System.Timers.Timer(elapseTime);
+                    m_timerAutoSync.Elapsed += OnTimedAutoSync;
+                    m_timerAutoSync.AutoReset = false;
+                    m_timerAutoSync.Start();
+                }
+            }
+            catch (System.Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private static void OnTimedAutoSync(Object source, ElapsedEventArgs e)
+        {
+            m_timerAutoSync.Stop();
+            m_timerAutoSync.Dispose();
+            Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}", e.SignalTime);
+
+        }
     }
 }

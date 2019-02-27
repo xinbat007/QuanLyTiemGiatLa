@@ -142,5 +142,29 @@ namespace QuanLyTiemGiatLa.Properties {
                 this["PasswordServerSync"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoSync {
+            get {
+                return ((bool)(this["AutoSync"]));
+            }
+            set {
+                this["AutoSync"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("12")]
+        public int HourAutoSync {
+            get {
+                return ((int)(this["HourAutoSync"]));
+            }
+            set {
+                this["HourAutoSync"] = value;
+            }
+        }
     }
 }
