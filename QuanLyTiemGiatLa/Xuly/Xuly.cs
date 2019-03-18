@@ -5,6 +5,7 @@ using Entity;
 using System.Security.Cryptography;
 using System.Text;
 using System.Data.SqlClient;
+using System.IO;
 
 namespace QuanLyTiemGiatLa.Xuly
 {

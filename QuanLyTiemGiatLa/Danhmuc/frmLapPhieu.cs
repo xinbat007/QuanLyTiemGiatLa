@@ -10,6 +10,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
     public partial class frmLapPhieu : Form
     {
         public OnSaved onsaved;
+        public NoticeSyncOnline m_notice;
         private TrangThai TrangThai;
         private Boolean _dainform = true;
         private Boolean _daloadxongform = false;
@@ -965,6 +966,7 @@ namespace QuanLyTiemGiatLa.Danhmuc
                     this.LoadData(false);
                     this.LockControl();
                     this.CapNhatMaVachMax();
+                    if (m_notice != null) m_notice();
                 }
             }
         }

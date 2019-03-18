@@ -145,10 +145,10 @@ namespace QuanLyTiemGiatLa.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool AutoSync {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int AutoSync {
             get {
-                return ((bool)(this["AutoSync"]));
+                return ((int)(this["AutoSync"]));
             }
             set {
                 this["AutoSync"] = value;

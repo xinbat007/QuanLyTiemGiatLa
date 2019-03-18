@@ -11,10 +11,14 @@ using System.Collections.Generic;
 using System.Net;
 using System.Text;
 using System.Timers;
+using QuanLyTiemGiatLa.Xuly;
+using Entity;
+using System.Threading;
 
 namespace QuanLyTiemGiatLa
 {
     public delegate void OnSaved();
+    public delegate void NoticeSyncOnline();
 
     public partial class frmMain : Form
     {
@@ -28,12 +32,14 @@ namespace QuanLyTiemGiatLa
         {
             this.LoadQuyenButton();
             this.LoadMauTrangThaiDo();
-            this.KhoiDongTimerAutoBackup();
-            this.InitTimerAutoSyncOnline();
-            this.tsslbPhienBan.Text = "Phiên bản ngày 30/01/2019";
+            this.tsslbPhienBan.Text = "Phiên bản ngày 19/03/2019";
             this.label1.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadTenCuaHang();
             this.label2.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadDiaChiCuaHang();
             this.label3.Text = Xuly.ThaoTacIniCauHinhPhanMem.ReadSoDienThoai();
+            this.tslSyncMessage.Text = "";
+            this.tspSyncProgress.Visible = false;
+            this.KhoiDongTimerAutoBackup();
+            this.InitTimerAutoSyncOnline();
         }
 
         private void LoadMauTrangThaiDo()
@@ -166,6 +172,7 @@ namespace QuanLyTiemGiatLa
             {
                 _frmLapPhieu = new frmLapPhieu();
                 _frmLapPhieu.Show(this);
+                _frmLapPhieu.m_notice += startThreadSyncOnline;
             }
             else _frmLapPhieu.Activate();
         }
@@ -339,30 +346,29 @@ namespace QuanLyTiemGiatLa
             btnCatDo_Click(sender, e);
         }
 
-        private System.Windows.Forms.Timer m_timerAutoBackup;
         private void KhoiDongTimerAutoBackup()
         {
             try
             {
+                System.Timers.Timer m_timerAutoBackup;
                 Xuly.ThaoTacIniBackup iniBackup = new QuanLyTiemGiatLa.Xuly.ThaoTacIniBackup();
                 iniBackup.Read();
                 if (!String.IsNullOrEmpty(iniBackup.DuongDanLuuThuMucFileBackup))
                 {
-                    m_timerAutoBackup = new System.Windows.Forms.Timer();
-                    m_timerAutoBackup.Interval = 900000;//15 phut * 60 = 900 giay * 1000 = 900.000
-                    m_timerAutoBackup.Tick += new EventHandler(delegate (object s, EventArgs e)
+                    int elapseTime = calculateElapseTimeToSync(iniBackup.ThoiGianTuDongBackUp);
+                    m_timerAutoBackup = new System.Timers.Timer();
+                    m_timerAutoBackup.AutoReset = false;
+                    m_timerAutoBackup.Interval = elapseTime;
+                    m_timerAutoBackup.Elapsed += new ElapsedEventHandler(delegate (object s, ElapsedEventArgs e)
                     {
                         try
                         {
-                            if (DateTime.Now.Hour == iniBackup.ThoiGianTuDongBackUp)
+                            m_timerAutoBackup.Stop();
+                            m_timerAutoBackup.Dispose();
+                            int result = Xuly.Xuly.AutoBackup(iniBackup.DuongDanLuuThuMucFileBackup, iniBackup.DuongDanLuuThuMucCopyTo);
+                            if (result == 1)
                             {
-                                m_timerAutoBackup.Stop();
-                                m_timerAutoBackup.Dispose();
-                                int result = Xuly.Xuly.AutoBackup(iniBackup.DuongDanLuuThuMucFileBackup, iniBackup.DuongDanLuuThuMucCopyTo);
-                                if (result == 1)
-                                {
-                                    MessageBox.Show("Không copy được sang thư mục: " + iniBackup.DuongDanLuuThuMucCopyTo, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                                }
+                                MessageBox.Show("Không copy được sang thư mục: " + iniBackup.DuongDanLuuThuMucCopyTo, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                             }
                         }
                         catch (System.Exception ex)
@@ -381,9 +387,8 @@ namespace QuanLyTiemGiatLa
             }
         }
 
-        private int calculateElapseTimeToSync()
+        private int calculateElapseTimeToSync(int hourToSync)
         {
-            int hourToSync = Properties.Settings.Default.HourAutoSync;
             int currentHour = DateTime.Now.Hour;
             int currentMinute = DateTime.Now.Minute;
             Console.WriteLine("Current time is: " + currentHour + ":" + currentMinute);
@@ -412,14 +417,28 @@ namespace QuanLyTiemGiatLa
         {
             try
             {
-                bool isAutoSync = Properties.Settings.Default.AutoSync;
-                if (isAutoSync)
+                int typeAutoSync = Properties.Settings.Default.AutoSync;
+                switch (typeAutoSync)
                 {
-                    int elapseTime = calculateElapseTimeToSync();
-                    m_timerAutoSync = new System.Timers.Timer(elapseTime);
-                    m_timerAutoSync.Elapsed += OnTimedAutoSync;
-                    m_timerAutoSync.AutoReset = false;
-                    m_timerAutoSync.Start();
+                    case 0:
+                        System.Console.WriteLine("Config ko sync");
+                        break;
+                    case 1:
+                        int elapseTime = calculateElapseTimeToSync(Properties.Settings.Default.HourAutoSync);
+                        if (isTest)
+                            elapseTime = 2000;
+                        m_timerAutoSync = new System.Timers.Timer();
+                        m_timerAutoSync.Interval = elapseTime;
+                        m_timerAutoSync.Elapsed += OnTimedAutoSync;
+                        m_timerAutoSync.AutoReset = false;
+                        m_timerAutoSync.Start();
+                        break;
+                    case 2:
+                        System.Console.WriteLine("Cấu hình sync mỗi khi tạo xong phiếu");
+                        break;
+                    default:
+                        System.Console.WriteLine("Ko biết cấu hình kiểu gì luôn");
+                        break;
                 }
             }
             catch (System.Exception ex)
@@ -428,12 +447,177 @@ namespace QuanLyTiemGiatLa
             }
         }
 
-        private static void OnTimedAutoSync(Object source, ElapsedEventArgs e)
+        private bool isTest = false;
+        private ListKhachHangEntity listCustomers = null;
+        private int countCustomerSync = 0;
+        private ListPhieuEntity listPhieuSync = null;
+        private int countPhieuSync = 0;
+        private bool m_isSyncing = false;
+
+        private void startThreadSyncOnline()
+        {
+            int typeAutoSync = Properties.Settings.Default.AutoSync;
+            if (typeAutoSync == 2)
+            {
+                Thread thread = new Thread(new ThreadStart(noticeSyncOnline));
+                thread.Start();
+            }
+        }
+        
+        private void noticeSyncOnline()
+        {
+            if (m_isSyncing)
+            {
+                return;
+            }
+            m_isSyncing = true;
+            // ===================================
+            // 0: check internet connection
+            // 1: login
+            // 2: lấy tất cả khách hàng chưa sync
+            // 3: sync khách hàng trc
+            // 4: lấy tất cả phiếu chưa sync
+            // 5: sync phiếu
+            // 6: reset screen
+            // ===================================
+            // Step 0
+            bool hasInternet = HttpUtil.IsInternetAvailable();
+            if (!hasInternet)
+            {
+                tslSyncMessage.Text = "Ko có kết nối mạng.";
+                m_isSyncing = false;
+                return;
+            }
+            // Step 1
+            tslSyncMessage.Text = "Đang kết nối vào server";
+            string pathServer = Properties.Settings.Default.PathServerSync;
+            string userNameServerSync = Properties.Settings.Default.UserNameServerSync;
+            string passwordServerSync = Properties.Settings.Default.PasswordServerSync;
+            if (!isTest)
+            {
+                ResultHttp result = HttpUtil.Login(pathServer, userNameServerSync, passwordServerSync);
+                if (result.Code != "200")
+                {
+                    tslSyncMessage.Text = "Không thể kết nối vào server online. Dừng đồng bộ.";
+                    tslSyncMessage.ForeColor = Color.Red;
+                    m_isSyncing = false;
+                    return;
+                }
+            }
+            // Step 2
+            tslSyncMessage.ForeColor = Color.Black;
+            tslSyncMessage.Text = "Đang lấy dữ liệu khách hàng chưa đồng bộ";
+            listCustomers = Business.KhachHangBO.SelectCustomerNotSync();
+            // Step 3 
+            int countSuccessCustomer = 0;
+            this.SyncCustomers(pathServer, ref countSuccessCustomer);
+            // Step 4
+            tslSyncMessage.Text = "Đang lấy dữ liệu phiếu chưa đồng bộ";
+            listPhieuSync = Business.PhieuBO.SelectOrderNotSync();
+            // Step 5
+            int countSuccessOrder = 0;
+            this.SyncOrders(pathServer, ref countSuccessOrder);
+            // Step 6
+            tslSyncMessage.Text = "Đã đồng bộ xong " + countSuccessCustomer + "/" + countCustomerSync +
+                " khách hàng, " + countSuccessOrder + "/" + countPhieuSync +
+                " phiếu. Chi tiết xem ở '" + Const.PATH_LOG_SYNC_CUSTOMERS + "' và '" + Const.PATH_LOG_SYNC_ORDERS + "'";
+            tspSyncProgress.Visible = false;
+            m_isSyncing = false;
+        }
+
+        private void OnTimedAutoSync(Object source, ElapsedEventArgs e)
         {
             m_timerAutoSync.Stop();
             m_timerAutoSync.Dispose();
             Console.WriteLine("The Elapsed event was raised at {0:HH:mm:ss.fff}", e.SignalTime);
+            this.noticeSyncOnline();
+        }
 
+        private void SyncOrders(String baseUrl, ref int countSuccess)
+        {
+            StreamWriter sw = new StreamWriter(Const.PATH_LOG_SYNC_ORDERS);
+            try
+            {
+                countPhieuSync = isTest ? 50 : listPhieuSync.Count;
+                //================
+                tspSyncProgress.Minimum = 0;
+                tspSyncProgress.Maximum = countPhieuSync;
+                tspSyncProgress.Value = 0;
+                tspSyncProgress.Visible = true;
+                //================
+                for (int i = 0; i < countPhieuSync; i++)
+                {
+                    bgwSyncOrders_ProgressChanged(i, countPhieuSync);
+                    if (isTest)
+                    {
+                        Thread.Sleep(100); countSuccess++;
+                    }
+                    else
+                    {
+                        HttpUtil.SyncPhieu(baseUrl, listPhieuSync[i], sw, ref countSuccess);
+                    }
+                }
+                bgwSyncOrders_ProgressChanged(countPhieuSync, countPhieuSync);
+                tspSyncProgress.Visible = false;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                sw.Close();
+            }
+        }
+
+        private void bgwSyncOrders_ProgressChanged(int i, int countPhieuSync)
+        {
+            tslSyncMessage.Text = "Đang đồng bộ " + i + " / " + countPhieuSync + " phiếu";
+            tspSyncProgress.Value = i;
+        }
+
+        private void SyncCustomers(String baseUrl, ref int countSuccess)
+        {
+            StreamWriter sw = new StreamWriter(Const.PATH_LOG_SYNC_CUSTOMERS);
+            try
+            {
+                tslSyncMessage.Text = "Đang đồng bộ khách hàng";
+                countCustomerSync = isTest ? 50 : listCustomers.Count;
+                //================
+                tspSyncProgress.Minimum = 0;
+                tspSyncProgress.Maximum = countCustomerSync;
+                tspSyncProgress.Value = 0;
+                tspSyncProgress.Visible = true;
+                //================
+                for (int i = 0; i < countCustomerSync; i++)
+                {
+                    bgwSyncCustomers_ProgressChanged(i, countCustomerSync);
+                    if (isTest)
+                    {
+                        Thread.Sleep(100); countSuccess++;
+                    }
+                    else
+                    {
+                        HttpUtil.SyncCustomer(baseUrl, listCustomers[i], sw, ref countSuccess);
+                    }
+                }
+                bgwSyncCustomers_ProgressChanged(countCustomerSync, countCustomerSync);
+                tspSyncProgress.Visible = false;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
+                sw.Close();
+            }
+        }
+
+        private void bgwSyncCustomers_ProgressChanged(int i, int countCustomerSync)
+        {
+            tslSyncMessage.Text = "Đang đồng bộ " + i + " / " + countCustomerSync + " khách hàng";
+            tspSyncProgress.Value = i;
         }
     }
 }

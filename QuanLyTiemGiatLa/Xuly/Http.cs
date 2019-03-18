@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace QuanLyTiemGiatLa.Xuly
@@ -85,7 +86,31 @@ namespace QuanLyTiemGiatLa.Xuly
             return result;
         }
 
-        public static ResultHttp SyncOrder(string baseUrl, PhieuSyncEntity order)
+        [DllImport("wininet.dll")]
+        private extern static bool InternetGetConnectedState(out int description, int reservedValue);
+        public static bool IsInternetAvailable()
+        {
+            int description;
+            return InternetGetConnectedState(out description, 0);
+        }
+
+        public static bool CheckForInternetConnection(string baseUrl)
+        {
+            try
+            {
+                using (var client = new WebClient())
+                using (client.OpenRead(baseUrl))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static ResultHttp SyncOrder(string baseUrl, PhieuSyncEntity order)
         {
 //{
 //    "MaPhieu": 80,
@@ -164,7 +189,44 @@ namespace QuanLyTiemGiatLa.Xuly
             return result;
         }
 
-        public static ResultHttp SyncCustomer(String baseUrl, KhachHangEntity customer)
+        public static void SyncPhieu(String baseUrl, PhieuEntity phieu, StreamWriter sw, ref int countSuccess)
+        {
+            ListChiTietPhieuEntity lstCTPhieu = Business.ChiTietPhieuBO.SelectByMaPhieu(phieu.MaPhieu);
+            PhieuSyncEntity phieuSync = new PhieuSyncEntity();
+            phieuSync.CopyFromPhieu(phieu);
+            phieuSync.ChiTietPhieu = lstCTPhieu;
+            ResultHttp result = HttpUtil.SyncOrder(baseUrl, phieuSync);
+            if (result.Code == "200")
+            {
+                Business.PhieuBO.UpdateIsSync(phieu.MaPhieu, true);
+                sw.WriteLine("Thành công phiếu '" + phieu.MaPhieu + "': " + result.Message);
+                countSuccess++;
+            }
+            else
+            {
+                sw.WriteLine("Lỗi phiếu '" + phieu.MaPhieu + "': " + result.Message);
+            }
+        }
+
+        public static void SyncCustomer(String baseUrl, KhachHangEntity khach, StreamWriter sw, ref int countSuccess)
+        {
+            ResultHttp result = HttpUtil.SyncCustomer(baseUrl, khach);
+            if (result.Code == "200")
+            {
+                sw.WriteLine("Thành công khách hàng '" + khach.TenKhachHang + "', '" + khach.DienThoai + "': " + result.Message);
+                Business.KhachHangBO.UpdateIsSync(khach.MaKhachHang, true);
+                countSuccess++;
+            }
+            else
+            {
+                sw.WriteLine("Lỗi khách hàng '" +
+                    khach.MaKhachHang + "', '" +
+                    khach.TenKhachHang + "', '" +
+                    khach.DienThoai + "': " + result.Message);
+            }
+        }
+
+        private static ResultHttp SyncCustomer(String baseUrl, KhachHangEntity customer)
         {
 //{
 //    "MaKhachHang": 31,

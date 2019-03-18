@@ -1,33 +1,33 @@
 ﻿namespace QuanLyTiemGiatLa
 {
-	partial class frmMain
-	{
-		/// <summary>
-		/// Required designer variable.
-		/// </summary>
-		private System.ComponentModel.IContainer components = null;
+    partial class frmMain
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-		/// <summary>
-		/// Clean up any resources being used.
-		/// </summary>
-		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-		protected override void Dispose(bool disposing)
-		{
-			if (disposing && (components != null))
-			{
-				components.Dispose();
-			}
-			base.Dispose(disposing);
-		}
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
 
-		#region Windows Form Designer generated code
+        #region Windows Form Designer generated code
 
-		/// <summary>
-		/// Required method for Designer support - do not modify
-		/// the contents of this method with the code editor.
-		/// </summary>
-		private void InitializeComponent()
-		{
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
             this.btnKhachHang = new System.Windows.Forms.Button();
@@ -37,6 +37,8 @@
             this.tslCaps = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
             this.tslNums = new QuanLyTiemGiatLa.ToolStripStatusKeyState();
             this.tsslbPhienBan = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tslSyncMessage = new System.Windows.Forms.ToolStripStatusLabel();
+            this.tspSyncProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnLoaiHang = new System.Windows.Forms.Button();
             this.btnMatHang = new System.Windows.Forms.Button();
@@ -88,6 +90,8 @@
             this.tslCaps,
             this.tslNums,
             this.tsslbPhienBan,
+            this.tslSyncMessage,
+            this.tspSyncProgress,
             this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 638);
             this.statusStrip1.Name = "statusStrip1";
@@ -139,13 +143,28 @@
             this.tsslbPhienBan.Size = new System.Drawing.Size(67, 19);
             this.tsslbPhienBan.Text = "Phiên bản:";
             // 
+            // tslSyncMessage
+            // 
+            this.tslSyncMessage.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
+            | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
+            this.tslSyncMessage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.tslSyncMessage.Name = "tslSyncMessage";
+            this.tslSyncMessage.Size = new System.Drawing.Size(98, 19);
+            this.tslSyncMessage.Text = "tslSyncMessage";
+            // 
+            // tspSyncProgress
+            // 
+            this.tspSyncProgress.Name = "tspSyncProgress";
+            this.tspSyncProgress.Size = new System.Drawing.Size(200, 18);
+            // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(694, 19);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(511, 19);
             this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "Mọi chi tiết về phần mềm xin quý khách vui lòng liên hệ: thienpq88@gmail.com - 03" +
     "9.817.2860";
@@ -483,44 +502,46 @@
             this.ResumeLayout(false);
             this.PerformLayout();
 
-		}
+        }
 
-		#endregion
+        #endregion
 
-		private System.Windows.Forms.Button btnKhachHang;
-		private System.Windows.Forms.StatusStrip statusStrip1;
-		private System.Windows.Forms.ToolStripStatusLabel statusLabel;
-		private System.Windows.Forms.Button btnLoaiHang;
-		private System.Windows.Forms.Button btnMatHang;
-		private System.Windows.Forms.Button btnLapPhieu;
-		private System.Windows.Forms.Button btnKieuGiat;
-		private System.Windows.Forms.Button btnBangGia;
-		private System.Windows.Forms.Button btnDanhSachPhieu;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Label label2;
-		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Button btnDotGiamGia;
-		private System.Windows.Forms.Button btnThongKeThuNhap;
-		private System.Windows.Forms.Button btnMucDoVip;
-		private System.Windows.Forms.Button btnNhungViecCanLam;
-		private System.Windows.Forms.Button btnNhanVien;
-		private System.Windows.Forms.Button btnDangXuat;
-		private System.Windows.Forms.Button btnDoiMatKhau;
-		private System.Windows.Forms.Button btnCauHinhGiaDeDo;
-		private System.Windows.Forms.ToolStripStatusLabel lblUser;
-		private System.Windows.Forms.Button btnThongKeTheoNhanVien;
-		private System.Windows.Forms.Button btnCauHinhHeThong;
-		private System.Windows.Forms.Button btnDSChotKet;
-		private System.Windows.Forms.Button btnCatDo;
-		private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem danhSachPhieuToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem lapPhieuToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem nhungViecCanLamToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem catDoToolStripMenuItem;
-		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-		private ToolStripStatusKeyState tslCaps;
-		private ToolStripStatusKeyState tslNums;
-		private System.Windows.Forms.ToolStripStatusLabel tsslbPhienBan;
-	}
+        private System.Windows.Forms.Button btnKhachHang;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel statusLabel;
+        private System.Windows.Forms.Button btnLoaiHang;
+        private System.Windows.Forms.Button btnMatHang;
+        private System.Windows.Forms.Button btnLapPhieu;
+        private System.Windows.Forms.Button btnKieuGiat;
+        private System.Windows.Forms.Button btnBangGia;
+        private System.Windows.Forms.Button btnDanhSachPhieu;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnDotGiamGia;
+        private System.Windows.Forms.Button btnThongKeThuNhap;
+        private System.Windows.Forms.Button btnMucDoVip;
+        private System.Windows.Forms.Button btnNhungViecCanLam;
+        private System.Windows.Forms.Button btnNhanVien;
+        private System.Windows.Forms.Button btnDangXuat;
+        private System.Windows.Forms.Button btnDoiMatKhau;
+        private System.Windows.Forms.Button btnCauHinhGiaDeDo;
+        private System.Windows.Forms.ToolStripStatusLabel lblUser;
+        private System.Windows.Forms.Button btnThongKeTheoNhanVien;
+        private System.Windows.Forms.Button btnCauHinhHeThong;
+        private System.Windows.Forms.Button btnDSChotKet;
+        private System.Windows.Forms.Button btnCatDo;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem danhSachPhieuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem lapPhieuToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nhungViecCanLamToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem catDoToolStripMenuItem;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+        private ToolStripStatusKeyState tslCaps;
+        private ToolStripStatusKeyState tslNums;
+        private System.Windows.Forms.ToolStripStatusLabel tsslbPhienBan;
+        private System.Windows.Forms.ToolStripStatusLabel tslSyncMessage;
+        private System.Windows.Forms.ToolStripProgressBar tspSyncProgress;
+    }
 }
 

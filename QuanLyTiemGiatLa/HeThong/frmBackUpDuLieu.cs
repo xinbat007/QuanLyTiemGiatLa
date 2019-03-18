@@ -31,13 +31,15 @@ namespace QuanLyTiemGiatLa.HeThong
                 txtCopyTo.Text = iniBackup.DuongDanLuuThuMucCopyTo;
                 if (iniBackup.ThoiGianTuDongBackUp == 0)
                     iniBackup.ThoiGianTuDongBackUp = 19;
-                txtThoiGianBackup.Text = iniBackup.ThoiGianTuDongBackUp.ToString();
+                cboHourBackup.Text = iniBackup.ThoiGianTuDongBackUp.ToString();
                 txtPathServer.Text = Properties.Settings.Default.PathServerSync;
                 txtUserNameServerSync.Text = Properties.Settings.Default.UserNameServerSync;
                 txtPasswordServerSync.Text = Properties.Settings.Default.PasswordServerSync;
-                chkAutoSync.Checked = Properties.Settings.Default.AutoSync;
+                rdbNotSync.Checked = Properties.Settings.Default.AutoSync == 0;
+                rdbAutoSyncAt.Checked = Properties.Settings.Default.AutoSync == 1;
+                rdbAutoSyncAfterOrderChange.Checked = Properties.Settings.Default.AutoSync == 2;
                 cboHourAutoSync.Text = Properties.Settings.Default.HourAutoSync.ToString();
-                cboHourAutoSync.Enabled = chkAutoSync.Checked;
+                cboHourAutoSync.Enabled = rdbAutoSyncAt.Checked;
                 btnSyncOrder.Enabled = Xuly.HttpUtil.Token() != "";
                 btnSyncCustomer.Enabled = Xuly.HttpUtil.Token() != "";
                 if (!bgwGetSyncInfo.IsBusy)
@@ -101,22 +103,13 @@ namespace QuanLyTiemGiatLa.HeThong
                 txtDuongDanFile.Focus();
                 return false;
             }
-            if (!string.IsNullOrEmpty(txtThoiGianBackup.Text))
+            if (!string.IsNullOrEmpty(cboHourBackup.Text))
             {
                 int temp;
-                if (int.TryParse(txtThoiGianBackup.Text, out temp))
-                {
-                    if (temp < 8 || temp > 21)
-                    {
-                        MessageBox.Show("Thời gian backup phải nằm trong khoảng 8h - 21h", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        txtThoiGianBackup.Focus();
-                        return false;
-                    }
-                }
-                else
+                if (!int.TryParse(cboHourBackup.Text, out temp))
                 {
                     MessageBox.Show("Thời gian backup phải là số", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    txtThoiGianBackup.Focus();
+                    cboHourBackup.Focus();
                     return false;
                 }
             }
@@ -125,7 +118,8 @@ namespace QuanLyTiemGiatLa.HeThong
 
         private void btnBackUp_Click(object sender, System.EventArgs e)
         {
-            if (!this.CheckForm()) return;
+            if (!this.CheckForm())
+                return;
             btnBackUp.Enabled = false;
             int result = Xuly.Xuly.AutoBackup(txtDuongDanFile.Text, txtCopyTo.Text);
             btnBackUp.Enabled = true;
@@ -146,7 +140,7 @@ namespace QuanLyTiemGiatLa.HeThong
                 Properties.Settings.Default.PathServerSync = txtPathServer.Text;
                 Properties.Settings.Default.UserNameServerSync = txtUserNameServerSync.Text;
                 Properties.Settings.Default.PasswordServerSync = txtPasswordServerSync.Text;
-                Properties.Settings.Default.AutoSync = chkAutoSync.Checked;
+                Properties.Settings.Default.AutoSync = rdbNotSync.Checked ? 0 : (rdbAutoSyncAt.Checked ? 1 : 2);
                 Properties.Settings.Default.HourAutoSync = int.Parse(cboHourAutoSync.Text);
                 Properties.Settings.Default.Save();
             }
@@ -164,24 +158,15 @@ namespace QuanLyTiemGiatLa.HeThong
                 if (!string.IsNullOrEmpty(txtDuongDanFile.Text))
                 {
                     int temp;
-                    if (int.TryParse(txtThoiGianBackup.Text, out temp))
-                    {
-                        if (temp < 8 || temp > 21)
-                        {
-                            MessageBox.Show("Thời gian backup phải nằm trong khoảng 8h - 21h", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            txtThoiGianBackup.Focus();
-                            return;
-                        }
-                    }
-                    else
+                    if (!int.TryParse(cboHourBackup.Text, out temp))
                     {
                         MessageBox.Show("Thời gian backup phải là số", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        txtThoiGianBackup.Focus();
+                        cboHourBackup.Focus();
                         return;
                     }
                 }
                 ThaoTacIniBackup thaotacini = new ThaoTacIniBackup();
-                thaotacini.Write(txtDuongDanFile.Text, txtCopyTo.Text, int.Parse(txtThoiGianBackup.Text));
+                thaotacini.Write(txtDuongDanFile.Text, txtCopyTo.Text, int.Parse(cboHourBackup.Text));
             }
             catch (System.Exception ex)
             {
@@ -255,7 +240,7 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             try
             {
-                StreamWriter sw = new StreamWriter(".\\log_ImportCustomers.txt");
+                StreamWriter sw = new StreamWriter(Const.PATH_LOG_IMPORT_CUSTOMERS);
                 for (int i = 0; i < countImportCustomer; ++i)
                 {
                     bgwImportCustomers.ReportProgress(i);
@@ -307,7 +292,7 @@ namespace QuanLyTiemGiatLa.HeThong
 
         private void bgwImportCustomers_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            MessageBox.Show("Nhập thành công " + countSuccess + "/" + countImportCustomer + ".\nChi tiết xem ở file 'log_ImportCustomers.txt'", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("Nhập thành công " + countSuccess + "/" + countImportCustomer + ".\nChi tiết xem ở file '" + Const.PATH_LOG_IMPORT_CUSTOMERS + "'", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
             lblMessage.Text = "";
             pgbProgress.Visible = false;
             btnImportCustomer.Enabled = true;
@@ -403,9 +388,17 @@ namespace QuanLyTiemGiatLa.HeThong
         {
             try
             {
-                ResultHttp result = HttpUtil.Login(txtPathServer.Text, txtUserNameServerSync.Text, txtPasswordServerSync.Text);
-                MessageBox.Show("Kết nối: " + result.Message + "!", "Thông báo", MessageBoxButtons.OK,
-                    result.Code != "200" ? MessageBoxIcon.Error : MessageBoxIcon.Asterisk);
+                bool hasInternet = HttpUtil.IsInternetAvailable();
+                if (hasInternet)
+                {
+                    ResultHttp result = HttpUtil.Login(txtPathServer.Text, txtUserNameServerSync.Text, txtPasswordServerSync.Text);
+                    MessageBox.Show("Kết nối: " + result.Message + "!", "Thông báo", MessageBoxButtons.OK,
+                        result.Code != "200" ? MessageBoxIcon.Error : MessageBoxIcon.Asterisk);
+                }
+                else
+                {
+                    MessageBox.Show("Ko có internet!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
             catch (System.Exception ex)
             {
@@ -466,31 +459,12 @@ namespace QuanLyTiemGiatLa.HeThong
             }
         }
 
-        private void SyncPhieu(PhieuEntity phieu, StreamWriter sw)
-        {
-            ListChiTietPhieuEntity lstCTPhieu = Business.ChiTietPhieuBO.SelectByMaPhieu(phieu.MaPhieu);
-            PhieuSyncEntity phieuSync = new PhieuSyncEntity();
-            phieuSync.CopyFromPhieu(phieu);
-            phieuSync.ChiTietPhieu = lstCTPhieu;
-            ResultHttp result = Xuly.HttpUtil.SyncOrder(txtPathServer.Text, phieuSync);
-            if (result.Code == "200")
-            {
-                Business.PhieuBO.UpdateIsSync(phieu.MaPhieu, true);
-                sw.WriteLine("Thành công phiếu '" + phieu.MaPhieu + "': " + result.Message);
-                countSuccess++;
-            }
-            else
-            {
-                sw.WriteLine("Lỗi phiếu '" + phieu.MaPhieu + "': " + result.Message);
-            }
-        }
-
         private void bgwSyncOrders_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             try
             {
                 countSuccess = 0;
-                StreamWriter sw = new StreamWriter(".\\log_SyncOrders.txt");
+                StreamWriter sw = new StreamWriter(Const.PATH_LOG_SYNC_ORDERS);
                 for (int i = 0; i < countPhieuSync; i++)
                 {
                     if (bgwSyncOrders.CancellationPending == true)
@@ -506,7 +480,7 @@ namespace QuanLyTiemGiatLa.HeThong
                     }
                     else
                     {
-                        SyncPhieu(listPhieuSync[i], sw);
+                        HttpUtil.SyncPhieu(txtPathServer.Text, listPhieuSync[i], sw, ref countSuccess);
                     }
                 }
                 bgwSyncOrders.ReportProgress(countPhieuSync);
@@ -542,11 +516,11 @@ namespace QuanLyTiemGiatLa.HeThong
             ResetForm();
             if (!e.Cancelled)
             {
-                MessageBox.Show("Thành công: " + countSuccess + "/" + countPhieuSync + " phiếu.\nChi tiết xem ở file 'log_SyncOrder.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Thành công: " + countSuccess + "/" + countPhieuSync + " phiếu.\nChi tiết xem ở file '" + Const.PATH_LOG_SYNC_ORDERS + "'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             else
             {
-                MessageBox.Show("Bạn đã dừng đồng bộ " + countSuccess + "/" + countPhieuSync + " phiếu.\nChi tiết xem ở file 'log_SyncOrder.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Bạn đã dừng đồng bộ " + countSuccess + "/" + countPhieuSync + " phiếu.\nChi tiết xem ở file '" + Const.PATH_LOG_SYNC_ORDERS + "'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -581,30 +555,12 @@ namespace QuanLyTiemGiatLa.HeThong
             }
         }
 
-        private void SyncCustomer(KhachHangEntity khach, StreamWriter sw)
-        {
-            ResultHttp result = Xuly.HttpUtil.SyncCustomer(txtPathServer.Text, khach);
-            if (result.Code == "200")
-            {
-                sw.WriteLine("Thành công khách hàng '" + khach.TenKhachHang + "', '" + khach.DienThoai + "': " + result.Message);
-                Business.KhachHangBO.UpdateIsSync(khach.MaKhachHang, true);
-                countSuccess++;
-            }
-            else
-            {
-                sw.WriteLine("Lỗi khách hàng '" +
-                    khach.MaKhachHang + "', '" +
-                    khach.TenKhachHang + "', '" +
-                    khach.DienThoai + "': " + result.Message);
-            }
-        }
-
         private void bgwSyncCustomers_DoWork(object sender, DoWorkEventArgs e)
         {
+            StreamWriter sw = new StreamWriter(Const.PATH_LOG_SYNC_CUSTOMERS);
             try
             {
                 countSuccess = 0;
-                StreamWriter sw = new StreamWriter(".\\log_SyncCustomers.txt");
                 for (int i = 0; i < countCustomerSync; i++)
                 {
                     if (bgwSyncCustomers.CancellationPending == true)
@@ -620,11 +576,10 @@ namespace QuanLyTiemGiatLa.HeThong
                     }
                     else
                     {
-                        SyncCustomer(listCustomers[i], sw);
+                        HttpUtil.SyncCustomer(txtPathServer.Text, listCustomers[i], sw, ref countSuccess);
                     }
                 }
                 bgwSyncCustomers.ReportProgress(countCustomerSync);
-                sw.Close();
             }
             catch (System.Exception ex)
             {
@@ -632,6 +587,7 @@ namespace QuanLyTiemGiatLa.HeThong
             }
             finally
             {
+                sw.Close();
             }
         }
 
@@ -649,11 +605,11 @@ namespace QuanLyTiemGiatLa.HeThong
             ResetForm();
             if (!e.Cancelled)
             {
-                MessageBox.Show("Thành công: " + countSuccess + "/" + countCustomerSync + " khách hàng.\nChi tiết xem ở file 'log_SyncCustomers.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Thành công: " + countSuccess + "/" + countCustomerSync + " khách hàng.\nChi tiết xem ở file '" + Const.PATH_LOG_SYNC_CUSTOMERS + "'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
             else
             {
-                MessageBox.Show("Bạn đã dừng đồng bộ " + countSuccess + "/" + countCustomerSync + " khách hàng.\nChi tiết xem ở file 'log_SyncCustomers.txt'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                MessageBox.Show("Bạn đã dừng đồng bộ " + countSuccess + "/" + countCustomerSync + " khách hàng.\nChi tiết xem ở file '" + Const.PATH_LOG_SYNC_CUSTOMERS + "'!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -682,9 +638,9 @@ namespace QuanLyTiemGiatLa.HeThong
             }
         }
 
-        private void chkAutoSync_CheckedChanged(object sender, EventArgs e)
+        private void rdbAutoSyncAt_CheckedChanged(object sender, EventArgs e)
         {
-            cboHourAutoSync.Enabled = chkAutoSync.Checked;
+            cboHourAutoSync.Enabled = rdbAutoSyncAt.Checked;
         }
     }
 }
